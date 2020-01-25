@@ -121,9 +121,11 @@
         function calcRoute(){
           var start = document.getElementById('start').value;
           var end = document.getElementById('end').value;
+          var stops = document.getElementById('stops').value;
           var request = {
             origin: start,
             destination: end,
+            waypoints: stops,
             travelMode: 'DRIVING'
           };
           directionsService.route(request, function(result, status){

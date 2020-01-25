@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
         /* Set the size of the div element that contains the map */
-
+        
         #map {
             height: 400px;
             /* The height is 400 pixels */
@@ -19,115 +19,333 @@
 <body>
     <h3>My Google Maps Demo</h3>
     <button class='button' id="showTraffic">Show Traffic</button>
-    <br />
-    <br />
+    <button class='button' id="showBikeLayer">Show Bike</button>
+    <br/>
+    <br/>
     <!--The div element for the map -->
     <div id="map"></div>
+    <p id="bikeLayerInfo"></p>
     <script>
         // Initialize and add the map
         function initMap() {
             // The location of Uluru
-            var pos1 = { lat: 30.6229431, lng: -96.3369853 };
-            var pos2 = { lat: 30.6223614, lng: -96.3397319 };
-            var pos3 = { lat: 30.6212282, lng: -96.3409694 };
-            var pos4 = { lat: 30.6191394, lng: -96.341943 };
-            var pos5 = { lat: 30.6156478, lng: -96.3366204 };
-            var pos6 = { lat: 30.6159756, lng: -96.336159 };
-            var pos7 = { lat: 30.6164511, lng: -96.33529 };
-            var pos8 = { lat: 30.6158048, lng: -96.3345014 };
-            var pos9 = { lat: 30.6148843, lng: -96.3344063 };
-            var pos10 = { lat: 30.6144688, lng: -96.3350124 };
-            var pos11 = { lat: 30.6125103, lng: -96.3332856 };
-            var pos12 = { lat: 30.6150441, lng: -96.3380101 };
-            var pos13 = { lat: 30.6139279, lng: -96.3397786 };
-            var pos14 = { lat: 30.6121273, lng: -96.3430092 };
-            var pos15 = { lat: 30.6170188, lng: -96.3431747 };
-            var pos16 = { lat: 30.6153488, lng: -96.344815 };
-            var pos17 = { lat: 30.616624, lng: -96.3457007 };
-            var pos18 = { lat: 30.6082132, lng: -96.342778 };
-            var pos19 = { lat: 30.6109209, lng: -96.3464543 };
-            var pos20 = { lat: 30.6107195, lng: -96.3478894 };
-            var pos21 = { lat: 30.6117368, lng: -96.3491777 };
-            var pos22 = { lat: 30.6122769, lng: -96.3477472 };
-            var pos23 = { lat: 30.6072649, lng: -96.3563267 };
-            var pos24 = { lat: 30.6076066, lng: -96.3538161 };
-            var pos25 = { lat: 30.6054296, lng: -96.3472921 };
-            var pos26 = { lat: 30.6051064, lng: -96.346981 };
-            var pos27 = { lat: 30.6050603, lng: -96.3491375 };
-            var pos28 = { lat: 30.6013654, lng: -96.3543799 };
+            var pos1 = {
+                lat: 30.6229431,
+                lng: -96.3369853
+            };
+            var pos2 = {
+                lat: 30.6223614,
+                lng: -96.3397319
+            };
+            var pos3 = {
+                lat: 30.6212282,
+                lng: -96.3409694
+            };
+            var pos4 = {
+                lat: 30.6191394,
+                lng: -96.341943
+            };
+            var pos5 = {
+                lat: 30.6156478,
+                lng: -96.3366204
+            };
+            var pos6 = {
+                lat: 30.6159756,
+                lng: -96.336159
+            };
+            var pos7 = {
+                lat: 30.6164511,
+                lng: -96.33529
+            };
+            var pos8 = {
+                lat: 30.6158048,
+                lng: -96.3345014
+            };
+            var pos9 = {
+                lat: 30.6148843,
+                lng: -96.3344063
+            };
+            var pos10 = {
+                lat: 30.6144688,
+                lng: -96.3350124
+            };
+            var pos11 = {
+                lat: 30.6125103,
+                lng: -96.3332856
+            };
+            var pos12 = {
+                lat: 30.6150441,
+                lng: -96.3380101
+            };
+            var pos13 = {
+                lat: 30.6139279,
+                lng: -96.3397786
+            };
+            var pos14 = {
+                lat: 30.6121273,
+                lng: -96.3430092
+            };
+            var pos15 = {
+                lat: 30.6170188,
+                lng: -96.3431747
+            };
+            var pos16 = {
+                lat: 30.6153488,
+                lng: -96.344815
+            };
+            var pos17 = {
+                lat: 30.616624,
+                lng: -96.3457007
+            };
+            var pos18 = {
+                lat: 30.6082132,
+                lng: -96.342778
+            };
+            var pos19 = {
+                lat: 30.6109209,
+                lng: -96.3464543
+            };
+            var pos20 = {
+                lat: 30.6107195,
+                lng: -96.3478894
+            };
+            var pos21 = {
+                lat: 30.6117368,
+                lng: -96.3491777
+            };
+            var pos22 = {
+                lat: 30.6122769,
+                lng: -96.3477472
+            };
+            var pos23 = {
+                lat: 30.6072649,
+                lng: -96.3563267
+            };
+            var pos24 = {
+                lat: 30.6076066,
+                lng: -96.3538161
+            };
+            var pos25 = {
+                lat: 30.6054296,
+                lng: -96.3472921
+            };
+            var pos26 = {
+                lat: 30.6051064,
+                lng: -96.346981
+            };
+            var pos27 = {
+                lat: 30.6050603,
+                lng: -96.3491375
+            };
+            var pos28 = {
+                lat: 30.6013654,
+                lng: -96.3543799
+            };
+
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer();
 
             // The map, centered at pos1
             var map = new google.maps.Map(
-                document.getElementById('map'), { zoom: 13, center: pos1 });
+                document.getElementById('map'), {
+                    zoom: 13,
+                    center: pos1
+                });
+
+            directionsRenderer.setMap(map);
 
             var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
             var parking = iconBase + "parking_lot_maps.png";
 
             // The marker, positioned at Uluru
-            var marker1 = new google.maps.Marker({ position: pos1, map: map, icon: parking });
-            var marker2 = new google.maps.Marker({ position: pos2, map: map, icon: parking });
-            var marker3 = new google.maps.Marker({ position: pos3, map: map, icon: parking });
-            var marker4 = new google.maps.Marker({ position: pos4, map: map, icon: parking });
-            var marker5 = new google.maps.Marker({ position: pos5, map: map, icon: parking });
-            var marker6 = new google.maps.Marker({ position: pos6, map: map, icon: parking });
-            var marker7 = new google.maps.Marker({ position: pos7, map: map, icon: parking });
-            var marker8 = new google.maps.Marker({ position: pos8, map: map, icon: parking });
-            var marker9 = new google.maps.Marker({ position: pos9, map: map, icon: parking });
-            var marker10 = new google.maps.Marker({ position: pos10, map: map, icon: parking });
-            var marker11 = new google.maps.Marker({ position: pos11, map: map, icon: parking });
-            var marker12 = new google.maps.Marker({ position: pos12, map: map, icon: parking });
-            var marker13 = new google.maps.Marker({ position: pos13, map: map, icon: parking });
-            var marker14 = new google.maps.Marker({ position: pos14, map: map, icon: parking });
-            var marker15 = new google.maps.Marker({ position: pos15, map: map, icon: parking });
-            var marker16 = new google.maps.Marker({ position: pos16, map: map, icon: parking });
-            var marker17 = new google.maps.Marker({ position: pos17, map: map, icon: parking });
-            var marker18 = new google.maps.Marker({ position: pos18, map: map, icon: parking });
-            var marker19 = new google.maps.Marker({ position: pos19, map: map, icon: parking });
-            var marker20 = new google.maps.Marker({ position: pos20, map: map, icon: parking });
-            var marker21 = new google.maps.Marker({ position: pos21, map: map, icon: parking });
-            var marker22 = new google.maps.Marker({ position: pos22, map: map, icon: parking });
-            var marker23 = new google.maps.Marker({ position: pos23, map: map, icon: parking });
-            var marker24 = new google.maps.Marker({ position: pos24, map: map, icon: parking });
-            var marker25 = new google.maps.Marker({ position: pos25, map: map, icon: parking });
-            var marker26 = new google.maps.Marker({ position: pos26, map: map, icon: parking });
-            var marker27 = new google.maps.Marker({ position: pos27, map: map, icon: parking });
-            var marker28 = new google.maps.Marker({ position: pos28, map: map, icon: parking });
+            var marker1 = new google.maps.Marker({
+                position: pos1,
+                map: map,
+                icon: parking
+            });
+            var marker2 = new google.maps.Marker({
+                position: pos2,
+                map: map,
+                icon: parking
+            });
+            var marker3 = new google.maps.Marker({
+                position: pos3,
+                map: map,
+                icon: parking
+            });
+            var marker4 = new google.maps.Marker({
+                position: pos4,
+                map: map,
+                icon: parking
+            });
+            var marker5 = new google.maps.Marker({
+                position: pos5,
+                map: map,
+                icon: parking
+            });
+            var marker6 = new google.maps.Marker({
+                position: pos6,
+                map: map,
+                icon: parking
+            });
+            var marker7 = new google.maps.Marker({
+                position: pos7,
+                map: map,
+                icon: parking
+            });
+            var marker8 = new google.maps.Marker({
+                position: pos8,
+                map: map,
+                icon: parking
+            });
+            var marker9 = new google.maps.Marker({
+                position: pos9,
+                map: map,
+                icon: parking
+            });
+            var marker10 = new google.maps.Marker({
+                position: pos10,
+                map: map,
+                icon: parking
+            });
+            var marker11 = new google.maps.Marker({
+                position: pos11,
+                map: map,
+                icon: parking
+            });
+            var marker12 = new google.maps.Marker({
+                position: pos12,
+                map: map,
+                icon: parking
+            });
+            var marker13 = new google.maps.Marker({
+                position: pos13,
+                map: map,
+                icon: parking
+            });
+            var marker14 = new google.maps.Marker({
+                position: pos14,
+                map: map,
+                icon: parking
+            });
+            var marker15 = new google.maps.Marker({
+                position: pos15,
+                map: map,
+                icon: parking
+            });
+            var marker16 = new google.maps.Marker({
+                position: pos16,
+                map: map,
+                icon: parking
+            });
+            var marker17 = new google.maps.Marker({
+                position: pos17,
+                map: map,
+                icon: parking
+            });
+            var marker18 = new google.maps.Marker({
+                position: pos18,
+                map: map,
+                icon: parking
+            });
+            var marker19 = new google.maps.Marker({
+                position: pos19,
+                map: map,
+                icon: parking
+            });
+            var marker20 = new google.maps.Marker({
+                position: pos20,
+                map: map,
+                icon: parking
+            });
+            var marker21 = new google.maps.Marker({
+                position: pos21,
+                map: map,
+                icon: parking
+            });
+            var marker22 = new google.maps.Marker({
+                position: pos22,
+                map: map,
+                icon: parking
+            });
+            var marker23 = new google.maps.Marker({
+                position: pos23,
+                map: map,
+                icon: parking
+            });
+            var marker24 = new google.maps.Marker({
+                position: pos24,
+                map: map,
+                icon: parking
+            });
+            var marker25 = new google.maps.Marker({
+                position: pos25,
+                map: map,
+                icon: parking
+            });
+            var marker26 = new google.maps.Marker({
+                position: pos26,
+                map: map,
+                icon: parking
+            });
+            var marker27 = new google.maps.Marker({
+                position: pos27,
+                map: map,
+                icon: parking
+            });
+            var marker28 = new google.maps.Marker({
+                position: pos28,
+                map: map,
+                icon: parking
+            });
 
             // The bikes, shown on the map
             const url = "/bikes_near_zach.csv";
             const showMarkers = (data) => {
                 const rows = data.split("\n");
                 const header = rows[0];
+                const markers = [];
                 for (var i = 1; i < rows.length; i++) {
                     const x = rows[i].split(",");
                     const lat = parseFloat(x[2]);
                     const lng = parseFloat(x[3]);
 
-                    var marker = new google.maps.Marker({
-                        position: {
-                            lat,
-                            lng
-                        },
-                        map: map
-                    });
+                    markers.push(
+                        new google.maps.Marker({
+                            position: {
+                                lat,
+                                lng
+                            },
+                            map: map
+                        })
+                    );
                 }
+                var markerCluster = new MarkerClusterer(map, markers, {
+                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                });
             }
             $.get(url, showMarkers)
-            // Show traffic
+                // Show traffic
             $("#showTraffic").click(() => {
-                var trafficLayer = new google.maps.TrafficLayer();
-                trafficLayer.setMap(map);
+                    var trafficLayer = new google.maps.TrafficLayer();
+                    trafficLayer.setMap(map);
+                })
+                // Show bike layer
+            $("#showBikeLayer").click(() => {
+                var bikeLayer = new google.maps.BicyclingLayer();
+                bikeLayer.setMap(map);
+                $("#bikeLayerInfo").text("Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage.")
             })
         }
     </script>
-      <!--Load the API from the specified URL
-      * The async attribute allows the browser to render the page while the API loads
-      * The key parameter will contain your own API key (which is not needed for this tutorial)
-      * The callback parameter executes the initMap() function
-      -->
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
-        </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback paramet  er executes the initMap() function
+    -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
+    </script>
 </body>
 
 </html>

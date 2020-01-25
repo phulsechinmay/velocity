@@ -2,54 +2,72 @@
 <html>
 
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <style>
-    /* Set the size of the div element that contains the map */
-    #map {
-      height: 400px;
-      /* The height is 400 pixels */
-      width: 100%;
-      /* The width is the width of the web page */
-    }
-  </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        /* Set the size of the div element that contains the map */
+        
+        #map {
+            height: 400px;
+            /* The height is 400 pixels */
+            width: 100%;
+            /* The width is the width of the web page */
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
 <body>
-  <h3>My Google Maps Demo</h3>
-  <!--The div element for the map -->
-  <div id="map"></div>
-  <script>
-    // Initialize and add the map
-    function initMap() {
-      // The map, centered at College Station
-      var map = new google.maps.Map(
-        document.getElementById('map'), { zoom: 4, center: { lat: 30.611462, lng: -96.344542 } });
-      // The bikes, shown on the map
-      const url = "https://s3.amazonaws.com/csvpastebin/uploads/21355897ebc7a3732472a765a70b8b72/bikes_near_zach.csv";
-      const showMarkers = (data) => {
-        const rows = data.split("\n");
-        const header = rows[0];
-        for (var i = 1; i < rows.length; i++) {
-          const x = rows[i].split(",");
-          const lat = parseFloat(x[2]);
-          const lng = parseFloat(x[3]);
-          
-          var marker = new google.maps.Marker({
-            position: { lat, lng },
-            map: map
-          });
+    <h3>My Google Maps Demo</h3>
+    <button class='button' id="showTraffic">Show Traffic</button>
+    <br/>
+    <br/>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The map, centered at College Station
+            var map = new google.maps.Map(
+                document.getElementById('map'), {
+                    zoom: 13,
+                    center: {
+                        lat: 30.611462,
+                        lng: -96.344542
+                    }
+                });
+            // The bikes, shown on the map
+            const url = "https://s3.amazonaws.com/csvpastebin/uploads/21355897ebc7a3732472a765a70b8b72/bikes_near_zach.csv";
+            const showMarkers = (data) => {
+                const rows = data.split("\n");
+                const header = rows[0];
+                for (var i = 1; i < rows.length; i++) {
+                    const x = rows[i].split(",");
+                    const lat = parseFloat(x[2]);
+                    const lng = parseFloat(x[3]);
+
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat,
+                            lng
+                        },
+                        map: map
+                    });
+                }
+            }
+            $.get(url, showMarkers)
+                // Show traffic
+            $("#showTraffic").click(() => {
+                var trafficLayer = new google.maps.TrafficLayer();
+                trafficLayer.setMap(map);
+            })
         }
-      }
-      $.get(url, showMarkers)
-    }
-  </script>
-  <!--Load the API from the specified URL
+    </script>
+    <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback parameter executes the initMap() function
     -->
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
     </script>
 </body>
 

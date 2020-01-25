@@ -17,7 +17,15 @@
 </head>
 
 <body>
-    <h3>My Google Maps Demo</h3>
+    <h3>Velocity</h3>
+
+    <div class="start">
+      <input type="text" id="startLocation" placeholder="Start">
+    </div>
+    <div class="end">
+      <input type="text" id="endLocation" placeholder="End">
+    </div>
+
     <button class='button' id="showTraffic">Show Traffic</button>
     <button class='button' id="showBikeLayer">Show Bike</button>
     <br/>
@@ -119,9 +127,9 @@
         }
         //plots route
         function calcRoute(){
-          var start = document.getElementById('start').value;
-          var end = document.getElementById('end').value;
-          var stops = document.getElementById('stops').value;
+          var start = $('#startLocation').text();
+          var end = $('#endLocation').text();
+          var stops = $('#startLocation').text();
           var request = {
             origin: start,
             destination: end,

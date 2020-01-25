@@ -19,10 +19,12 @@
 <body>
     <h3>My Google Maps Demo</h3>
     <button class='button' id="showTraffic">Show Traffic</button>
+    <button class='button' id="showBikeLayer">Show Bike</button>
     <br/>
     <br/>
     <!--The div element for the map -->
     <div id="map"></div>
+    <p id="bikeLayerInfo"></p>
     <script>
         // Initialize and add the map
         function initMap() {
@@ -40,32 +42,45 @@
             const showMarkers = (data) => {
                 const rows = data.split("\n");
                 const header = rows[0];
+                const markers = [];
                 for (var i = 1; i < rows.length; i++) {
                     const x = rows[i].split(",");
                     const lat = parseFloat(x[2]);
                     const lng = parseFloat(x[3]);
 
-                    var marker = new google.maps.Marker({
-                        position: {
-                            lat,
-                            lng
-                        },
-                        map: map
-                    });
+                    markers.push(
+                        new google.maps.Marker({
+                            position: {
+                                lat,
+                                lng
+                            },
+                            map: map
+                        })
+                    );
                 }
+                var markerCluster = new MarkerClusterer(map, markers, {
+                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                });
             }
             $.get(url, showMarkers)
-                // Show traffic
+                // Show traffic layer
             $("#showTraffic").click(() => {
-                var trafficLayer = new google.maps.TrafficLayer();
-                trafficLayer.setMap(map);
+                    var trafficLayer = new google.maps.TrafficLayer();
+                    trafficLayer.setMap(map);
+                })
+                // Show bike layer
+            $("#showBikeLayer").click(() => {
+                var bikeLayer = new google.maps.BicyclingLayer();
+                bikeLayer.setMap(map);
+                $("#bikeLayerInfo").text("Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage.")
             })
         }
     </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
     * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
+    * The callback paramet  er executes the initMap() function
     -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
     </script>

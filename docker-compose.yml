@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  nginx:
+    image: nginx
+    user: root
+    volumes:
+      - ./frontend:/html
+      - ./nginx.conf:/etc/nginx/conf.d/mysite.template
+    working_dir: /
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    command: /bin/bash -c "envsubst '$${API_LOCATION},$${UI_LOCATION}' < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"

@@ -56,9 +56,14 @@
             var pos27 = { lat: 30.6050603, lng: -96.3491375 };
             var pos28 = { lat: 30.6013654, lng: -96.3543799 };
 
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer();
+
             // The map, centered at pos1
             var map = new google.maps.Map(
                 document.getElementById('map'), { zoom: 13, center: pos1 });
+
+            directionsRenderer.setMap(map);
 
             var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
             var parking = iconBase + "parking_lot_maps.png";

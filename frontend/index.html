@@ -14,24 +14,34 @@
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
-// Initialize and add the map
-function initMap() {
-  // The location of Uluru
-  var uluru = {lat: -25.344, lng: 131.036};
-  // The map, centered at Uluru
-  var map = new google.maps.Map(
-      document.getElementById('map'), {zoom: 4, center: uluru});
-  // The marker, positioned at Uluru
-  var marker = new google.maps.Marker({position: uluru, map: map});
-}
+      // Initialize and add the map
+      function initMap() {
+        // The location of Uluru
+        var uluru = {lat: -25.344, lng: 131.036};
+        // The map, centered at Uluru
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 4, center: uluru});
+        // The marker, positioned at Uluru
+        var marker = new google.maps.Marker({position: uluru, map: map});
+      }
     </script>
-    <!--Load the API from the specified URL
-    * The async attribute allows the browser to render the page while the API loads
-    * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
-    -->
+      <!--Load the API from the specified URL
+      * The async attribute allows the browser to render the page while the API loads
+      * The key parameter will contain your own API key (which is not needed for this tutorial)
+      * The callback parameter executes the initMap() function
+      -->
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const VEORIDE_API_HOST = "manhattan-host.veoride.com"
+        const VEORIDE_API_PORT = 8444
+        let phoneNumber = prompt('Please enter your phone number for VeoRide.')
+        axios.get(`${VEORIDE_API_HOST}:${VEORIDE_API_PORT}/api/auth/customers/${phoneNumber}/verification_code`)
+          .then(function(response) {
+            let verificationCode = prompt("What\'s the verification code sent to you by VeoRide?");
+          })
     </script>
   </body>
 </html>

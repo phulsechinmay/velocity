@@ -127,6 +127,23 @@
           }
         });
       }
+      //plots route
+      function calcRoute() {
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+        var stops = document.getElementById("stops").value;
+        var request = {
+          origin: start,
+          destination: end,
+          waypoints: stops,
+          travelMode: "DRIVING"
+        };
+        directionsService.route(request, function(result, status) {
+          if (status == "OK") {
+            directionsRenderer.setDirections(result);
+          }
+        });
+      }
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <!--Load the API from the specified URL

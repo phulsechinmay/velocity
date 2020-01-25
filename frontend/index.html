@@ -1,122 +1,132 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
-        /* Set the size of the div element that contains the map */
-        
-        #map {
-            height: 400px;
-            /* The height is 400 pixels */
-            width: 100%;
-            /* The width is the width of the web page */
-        }
-    </style>
-    <link rel="stylesheet" type="text/css" href="index.css">
-</head>
+      /* Set the size of the div element that contains the map */
 
-<body>
+      #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 100%;
+        /* The width is the width of the web page */
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+  </head>
+
+  <body>
     <h3>My Google Maps Demo</h3>
-    <button class='button' id="showTraffic">Show Traffic</button>
-    <button class='button' id="showBikeLayer">Show Bike</button>
-    <br/>
-    <br/>
+    <button class="button" id="showTraffic">Show Traffic</button>
+    <button class="button" id="showBikeLayer">Show Bike</button>
+    <br />
+    <br />
     <!--The div element for the map -->
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>
     <script>
-        // Initialize and add the map
-        function initMap() {
-            const positions = [
-                [30.6229431, -96.3369853],
-                [30.6223614, -96.3397319],
-                [30.6212282, -96.3409694],
-                [30.6191394, -96.341943],
-                [30.6156478, -96.3366204],
-                [30.6159756, -96.336159],
-                [30.6164511, -96.33529],
-                [30.6158048, -96.3345014],
-                [30.6148843, -96.3344063],
-                [30.6144688, -96.3350124],
-                [30.6125103, -96.3332856],
-                [30.6150441, -96.3380101],
-                [30.6139279, -96.3397786],
-                [30.6121273, -96.3430092],
-                [30.6170188, -96.3431747],
-                [30.6153488, -96.344815],
-                [30.616624, -96.3457007],
-                [30.6082132, -96.342778],
-                [30.6109209, -96.3464543],
-                [30.6107195, -96.3478894],
-                [30.6117368, -96.3491777],
-                [30.6122769, -96.3477472],
-                [30.6072649, -96.3563267],
-                [30.6076066, -96.3538161],
-                [30.6054296, -96.3472921],
-                [30.6051064, -96.346981],
-                [30.6050603, -96.3491375],
-                [30.6013654, -96.3543799]
-            ];
+      // Initialize and add the map
+      var showTrafficLayer = false;
+      var showBikingLayer = false;
 
-            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-            var parking = iconBase + "parking_lot_maps.png";
+      function initMap() {
+        const positions = [
+          [30.6229431, -96.3369853],
+          [30.6223614, -96.3397319],
+          [30.6212282, -96.3409694],
+          [30.6191394, -96.341943],
+          [30.6156478, -96.3366204],
+          [30.6159756, -96.336159],
+          [30.6164511, -96.33529],
+          [30.6158048, -96.3345014],
+          [30.6148843, -96.3344063],
+          [30.6144688, -96.3350124],
+          [30.6125103, -96.3332856],
+          [30.6150441, -96.3380101],
+          [30.6139279, -96.3397786],
+          [30.6121273, -96.3430092],
+          [30.6170188, -96.3431747],
+          [30.6153488, -96.344815],
+          [30.616624, -96.3457007],
+          [30.6082132, -96.342778],
+          [30.6109209, -96.3464543],
+          [30.6107195, -96.3478894],
+          [30.6117368, -96.3491777],
+          [30.6122769, -96.3477472],
+          [30.6072649, -96.3563267],
+          [30.6076066, -96.3538161],
+          [30.6054296, -96.3472921],
+          [30.6051064, -96.346981],
+          [30.6050603, -96.3491375],
+          [30.6013654, -96.3543799]
+        ];
 
-            var map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 13,
-                    center: {
-                        lat: positions[0][0],
-                        lng: positions[0][1]
-                    }
-                });
+        var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
+        var parking = iconBase + "parking_lot_maps.png";
 
-            positions.forEach(function(position) {
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(position[0], position[1]),
-                    icon: parking,
-                    map: map
-                });
-            });
+        var map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 13,
+          center: {
+            lat: positions[0][0],
+            lng: positions[0][1]
+          }
+        });
 
-            // The bikes, shown on the map
-            const url = "/bikes_near_zach.csv";
-            const showMarkers = (data) => {
-                const rows = data.split("\n");
-                const header = rows[0];
-                const markers = [];
-                for (var i = 1; i < rows.length; i++) {
-                    const x = rows[i].split(",");
-                    const lat = parseFloat(x[2]);
-                    const lng = parseFloat(x[3]);
+        positions.forEach(function(position) {
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(position[0], position[1]),
+            icon: parking,
+            map: map
+          });
+        });
 
-                    markers.push(
-                        new google.maps.Marker({
-                            position: {
-                                lat,
-                                lng
-                            },
-                            map: map
-                        })
-                    );
-                }
-                var markerCluster = new MarkerClusterer(map, markers, {
-                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-                });
-            }
-            $.get(url, showMarkers)
-                // Show traffic
-            $("#showTraffic").click(() => {
-                    var trafficLayer = new google.maps.TrafficLayer();
-                    trafficLayer.setMap(map);
-                })
-                // Show bike layer
-            $("#showBikeLayer").click(() => {
-                var bikeLayer = new google.maps.BicyclingLayer();
-                bikeLayer.setMap(map);
-                $("#bikeLayerInfo").text("Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage.")
-            })
-        }
+        // The bikes, shown on the map
+        const url = "/bikes_near_zach.csv";
+        const showMarkers = data => {
+          const rows = data.split("\n");
+          const header = rows[0];
+          const markers = [];
+          for (var i = 1; i < rows.length; i++) {
+            const x = rows[i].split(",");
+            const lat = parseFloat(x[2]);
+            const lng = parseFloat(x[3]);
+
+            markers.push(
+              new google.maps.Marker({
+                position: {
+                  lat,
+                  lng
+                },
+                map: map
+              })
+            );
+          }
+          var markerCluster = new MarkerClusterer(map, markers, {
+            imagePath:
+              "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
+          });
+        };
+        $.get(url, showMarkers);
+        // Show traffic
+        var trafficLayer = new google.maps.TrafficLayer();
+        $("#showTraffic").click(() => {
+          showTrafficLayer = !showTrafficLayer;
+          trafficLayer.setMap(showTrafficLayer ? map : null);
+        });
+        // Show bike layer
+        var bikeLayer = new google.maps.BicyclingLayer();
+        $("#showBikeLayer").click(() => {
+          showBikingLayer = !showBikingLayer;
+          if (showBikingLayer) {
+            $("#bikeLayerInfo").text(
+              'Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated "bike lanes." Dashed routes indicate streets or paths otherwise recommended for bicycle usage.'
+            );
+            bikeLayer.setMap(map);
+          } else {
+            bikeLayer.setMap(null);
+          }
+        });
+      }
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <!--Load the API from the specified URL
@@ -124,8 +134,10 @@
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback paramet  er executes the initMap() function
     -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
-    </script>
-</body>
-
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap"
+    ></script>
+  </body>
 </html>

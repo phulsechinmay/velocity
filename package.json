@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/phulsechinmay/velocity/issues"
   },
-  "homepage": "https://github.com/phulsechinmay/velocity#readme"
+  "homepage": "https://github.com/phulsechinmay/velocity#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

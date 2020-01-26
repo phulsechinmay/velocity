@@ -158,14 +158,13 @@ function initMap() {
           bikeLeg = response
           //directionsRenderer.setDirections(response);
           walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
-          walkLeg.routes[0].warnings.pop();
+          walkLeg.routes[0].warnings.pop()
           directionsRenderer.setDirections(walkLeg)
         } else {
           window.alert('Directions request failed due to ' + status)
         }
       }
     )
-    
   }
 
   var parking = {
@@ -204,8 +203,8 @@ function initMap() {
   })
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
-    const pos = bikeMarker.getPosition();
-    walkToBike($("#start").val(), pos.lat() + "," + pos.lng(), $("#end").val());
+    const pos = bikeMarker.getPosition()
+    walkToBike($('#start').val(), pos.lat() + ',' + pos.lng(), $('#end').val())
   }
   // Show bikes on map
   const showBikeMarkers = data => {

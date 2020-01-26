@@ -6,7 +6,7 @@
       /* Set the size of the div element that contains the map */
 
       #map {
-        height: 400px;
+        height: 600px;
         /* The height is 400 pixels */
         width: 100%;
         /* The width is the width of the web page */
@@ -15,14 +15,14 @@
     <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
 
-<body>
+  <body>
     <h3>Velocity</h3>
 
     <div class="start">
-      <input type="text" id="startLocation" placeholder="Start">
+      <input type="text" id="startLocation" placeholder="Start" />
     </div>
     <div class="end">
-      <input type="text" id="endLocation" placeholder="End">
+      <input type="text" id="endLocation" placeholder="End" />
     </div>
     <button class='button' id="showRoute">Show Route</button>
     <button class='button' id="showTraffic">Show Traffic</button>
@@ -74,7 +74,7 @@
         var directionsService = new google.maps.DirectionsService();
         var directionsRenderer = new google.maps.DirectionsRenderer();
         var map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 13,
+          zoom: 18,
           center: {
             lat: positions[0][0],
             lng: positions[0][1]
@@ -98,18 +98,21 @@
           const markers = [];
           for (var i = 1; i < rows.length; i++) {
             const x = rows[i].split(",");
-            const lat = parseFloat(x[2]);
-            const lng = parseFloat(x[3]);
+            const lock_open = parseInt(x[1]);
+            if (lock_open) {
+              const lat = parseFloat(x[2]);
+              const lng = parseFloat(x[3]);
 
-            markers.push(
-              new google.maps.Marker({
-                position: {
-                  lat,
-                  lng
-                },
-                map: map
-              })
-            );
+              markers.push(
+                new google.maps.Marker({
+                  position: {
+                    lat,
+                    lng
+                  },
+                  map: map
+                })
+              );
+            }
           }
           var markerCluster = new MarkerClusterer(map, markers, {
             imagePath:

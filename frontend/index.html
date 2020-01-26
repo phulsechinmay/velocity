@@ -6,7 +6,7 @@
       /* Set the size of the div element that contains the map */
 
       #map {
-        height: 400px;
+        height: 600px;
         /* The height is 400 pixels */
         width: 100%;
         /* The width is the width of the web page */
@@ -17,8 +17,8 @@
 
   <body>
     <h3>My Google Maps Demo</h3>
-    <button class="button" id="showTraffic">Show Traffic</button>
-    <button class="button" id="showBikeLayer">Show Bike</button>
+    <button class="button" id="showTraffic">Traffic Layer</button>
+    <button class="button" id="showBikeLayer">Bike Layer</button>
     <br />
     <br />
     <!--The div element for the map -->
@@ -65,11 +65,12 @@
         var parking = iconBase + "parking_lot_maps.png";
 
         var map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 13,
+          zoom: 18,
           center: {
             lat: positions[0][0],
             lng: positions[0][1]
-          }
+          },
+          // mapTypeId: 'satellite'
         });
 
         positions.forEach(function(position) {

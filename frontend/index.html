@@ -8,12 +8,71 @@
         width: 100%;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/webflow.css" />
   </head>
 
   <body>
-    <h3>Velocity</h3>
+    
+    <div>
+      <div
+        data-collapse="all"
+        data-animation="over-left"
+        data-duration="400"
+        class="navbar w-nav"
+      >
+        <div class="container w-container">
+          <nav role="navigation" class="nav-menu w-nav-menu">
+            <img
+              src="https://uploads-ssl.webflow.com/5e2d06eb86f417022f1da441/5e2d1aad12d935d467ec04cd_Asset%208.png"
+              width="343"
+              alt=""
+              class="image-2"
+            />
+            <div>
+              <form action="/search" class="search w-form">
+                <div class="container-2 w-container"></div>
+                <div>
+                  <input
+                    type="text"
+                    class="search-input w-input"
+                    maxlength="256"
+                    name="query"
+                    placeholder="Choose starting point..."
+                    id="start"
+                    required=""
+                  />
+                </div>
+              </form>
+            </div>
+            <div>
+              <form action="/search" class="search w-form">
+                <div class="container-2 w-container"></div>
+                <div>
+                  <input
+                    type="text"
+                    class="search-input w-input"
+                    maxlength="256"
+                    name="query"
+                    placeholder="Choose destination..."
+                    id="end"
+                    required=""
+                  />
+                </div>
+              </form>
+            </div>
+          </nav>
+          <div class="menu-button w-nav-button">
+            <div class="w-icon-nav-menu"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div id="right-panel"></div>
+    <div id="map"></div>
+    <p id="bikeLayerInfo"></p>
+    <!--
     <div id="floating-panel">
       <input type="text" id="start" placeholder="Start" />
       <input type="text" id="end" placeholder="End" />
@@ -23,16 +82,17 @@
     <button class="button" id="showBikeLayer">Show Bike</button>
     <br />
     <br />
-    <!--The div element for the map -->
     <div id="right-panel"></div>
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>
+    -->
 
     <!-- JS Library Includes -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 
     <!-- Custom JS Files -->
+    <script src="/webflow.js"></script>
     <script src="/config.js"></script>
     <script src="/veoride.js"></script>
     <script src="index.js"></script>

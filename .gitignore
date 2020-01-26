@@ -130,3 +130,6 @@ dmypy.json
 
 *node_modules/
 *.DS_Store
+
+*.csr
+*.pem

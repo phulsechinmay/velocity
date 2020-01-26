@@ -3,7 +3,6 @@ var showTrafficLayer = false;
 var showBikingLayer = false;
 
 
-
 function initMap() {
   const STATION_POSITIONS = [
     [30.6229431, -96.3369853],

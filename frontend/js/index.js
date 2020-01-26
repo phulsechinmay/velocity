@@ -129,41 +129,41 @@ function initMap() {
     }
   }
 
-  function walkToBike(origin,bike,destination){
-    var walkLeg;
-    var bikeLeg;
+  function walkToBike(origin, bike, destination) {
+    var walkLeg
+    var bikeLeg
     directionsService.route(
       {
         origin: origin,
         destination: bike,
-        travelMode: "WALKING"
+        travelMode: 'WALKING',
       },
       function(response, status) {
-        if (status === "OK") {
-          walkLeg = response;
+        if (status === 'OK') {
+          walkLeg = response
           //directionsRenderer.setDirections(response);
         } else {
-          window.alert("Directions request failed due to " + status);
+          window.alert('Directions request failed due to ' + status)
         }
       }
-    );
+    )
     directionsService.route(
       {
         origin: bike,
         destination: destination,
-        travelMode: "BICYCLING"
+        travelMode: 'BICYCLING',
       },
       function(response, status) {
-        if (status === "OK") {
-          bikeLeg = response;
+        if (status === 'OK') {
+          bikeLeg = response
           //directionsRenderer.setDirections(response);
         } else {
-          window.alert("Directions request failed due to " + status);
+          window.alert('Directions request failed due to ' + status)
         }
       }
-    );
-    walkLeg.route[0].legs.push(bikeLeg.route[0].legs[0]);
-    directionsRenderer.setDirections(walkLeg);
+    )
+    walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
+    directionsRenderer.setDirections(walkLeg)
   }
 
   var parking = {
@@ -202,8 +202,10 @@ function initMap() {
   })
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
-    const pos = bikeMarker.getPosition()
-    console.log(pos)
+    const pos = bikeMarker.getPosition();
+    console.log(pos.lat());
+    console.log(pos.lng());
+    walkToBike($("#start").val, pos.lat() + "," + pos.lng(), $("#end").val);
   }
   // Show bikes on map
   const showBikeMarkers = data => {

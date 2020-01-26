@@ -52,11 +52,26 @@ function initMap() {
   control.style.display = "block";
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 
+  var defaultBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(30.5159362,-96.5171539),
+    new google.maps.LatLng(30.7215865,-96.2252309)
+  );
+  var startAutocomplete = new google.maps.places.Autocomplete(document.getElementById('start'), {
+    bounds: defaultBounds,
+    strictBounds: true
+  });
+
   var onChangeHandler = function() {
     calculateAndDisplayRoute(directionsService, directionsRenderer);
   };
-  document.getElementById("start").addEventListener("change", onChangeHandler);
-  document.getElementById("end").addEventListener("change", onChangeHandler);
+  startAutocomplete.addListener("place_changed", function(){
+    var endAutocomplete = new google.maps.places.Autocomplete(document.getElementById('end'), {
+      bounds: defaultBounds,
+      strictBounds: true
+    });
+    endAutocomplete.addListener("place_changed",onChangeHandler);
+  });
+  
   function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     var start = document.getElementById("start").value;
     var end = document.getElementById("end").value;

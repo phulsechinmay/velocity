@@ -8,6 +8,7 @@ var bikeRoute
 var carRoute
 var walkLeg
 var bikeLeg
+var currentRoute
 
 function initMap() {
   const positions = [
@@ -94,7 +95,6 @@ function initMap() {
       function(response, status) {
         if (status === 'OK') {
           bikeRoute = response
-          //directionsRenderer.setDirections(response);
         } else {
           window.alert('Directions request failed due to ' + status)
         }
@@ -131,7 +131,28 @@ function initMap() {
     }
   }
 
-  function walkToBike(origin, bike, destination) {
+  function route(origin, destination, travelMode) {
+    if (!['WALKING', 'BIKING', 'DRIVING'].includes(travelMode)) {
+      alert('Unknown travel mode')
+    }
+    directionsService.route(
+      {
+        origin,
+        destination,
+        travelMode,
+      },
+      function(response, status) {
+        if (status === 'OK') {
+          currentRoute = response
+          directionsRenderer.setDirections(currentRoute)
+        } else {
+          window.alert('Directions request failed due to ' + status)
+        }
+      }
+    )
+  }
+
+  function walkThenBike(origin, bike, destination) {
     directionsService.route(
       {
         origin: origin,
@@ -204,7 +225,15 @@ function initMap() {
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
     const pos = bikeMarker.getPosition()
-    walkToBike($('#start').val(), pos.lat() + ',' + pos.lng(), $('#end').val())
+    const start = $('#start').val();
+    const end = $('#end').val();
+    if (start & end) {
+      walkThenBike(start, pos.lat() + ',' + pos.lng(), end)
+    } else if (start) {
+      route(start, pos.lat() + ',' + pos.lng(), 'WALKING')
+    } else {
+      alert("Please enter a start location");
+    }
   }
   // Show bikes on map
   const showBikeMarkers = data => {

@@ -13,15 +13,15 @@
             /* The width is the width of the web page */
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="index.css" />
 </head>
 
 <body>
     <h3>My Google Maps Demo</h3>
-    <button class='button' id="showTraffic">Show Traffic</button>
-    <button class='button' id="showBikeLayer">Show Bike</button>
-    <br/>
-    <br/>
+    <button class="button" id="showTraffic">Show Traffic</button>
+    <button class="button" id="showBikeLayer">Show Bike Routes</button>
+    <br />
+    <br />
     <!--The div element for the map -->
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>
@@ -59,29 +59,52 @@
                 [30.6013654, -96.3543799]
             ];
 
-            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-            var parking = iconBase + "parking_lot_maps.png";
+            var iconBase = "https://maps.google.com/mapfiles/kml/";
+            var parking = {
+                url: iconBase + "paddle/P.png",
+                scaledSize: new google.maps.Size(30, 30),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 0)
+            };
 
-            var map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 13,
-                    center: {
-                        lat: positions[0][0],
-                        lng: positions[0][1]
-                    }
-                });
+            var bike = {
+                url: iconBase + "shapes/cycling.png",
+                scaledSize: new google.maps.Size(30, 30),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 0)
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 13,
+                center: {
+                    lat: positions[0][0],
+                    lng: positions[0][1]
+                }
+            });
+
+            var markers = [];
 
             positions.forEach(function(position) {
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(position[0], position[1]),
                     icon: parking,
-                    map: map
+                    map: map,
+                    zindex: 10,
+                    visible: false
                 });
+                markers.push(marker);
+            });
+
+            google.maps.event.addListener(map, "zoom_changed", function() {
+                var zoom = map.getZoom();
+                for (i = 0; i < markers.length; i++) {
+                    markers[i].setVisible(zoom >= 15);
+                }
             });
 
             // The bikes, shown on the map
             const url = "/bikes_near_zach.csv";
-            const showMarkers = (data) => {
+            const showMarkers = data => {
                 const rows = data.split("\n");
                 const header = rows[0];
                 const markers = [];
@@ -96,26 +119,29 @@
                                 lat,
                                 lng
                             },
-                            map: map
+                            map: map,
+                            icon: bike
                         })
                     );
                 }
                 var markerCluster = new MarkerClusterer(map, markers, {
-                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                    imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
                 });
-            }
-            $.get(url, showMarkers)
-                // Show traffic
+            };
+            $.get(url, showMarkers);
+            // Show traffic
             $("#showTraffic").click(() => {
-                    var trafficLayer = new google.maps.TrafficLayer();
-                    trafficLayer.setMap(map);
-                })
-                // Show bike layer
+                var trafficLayer = new google.maps.TrafficLayer();
+                trafficLayer.setMap(map);
+            });
+            // Show bike layer
             $("#showBikeLayer").click(() => {
                 var bikeLayer = new google.maps.BicyclingLayer();
                 bikeLayer.setMap(map);
-                $("#bikeLayerInfo").text("Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage.")
-            })
+                $("#bikeLayerInfo").text(
+                    "Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage."
+                );
+            });
         }
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
@@ -124,8 +150,7 @@
     * The key parameter will contain your own API key (which is not needed for this tutorial)
     * The callback paramet  er executes the initMap() function
     -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap">
-    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdqos0PqD7ozbyWxR-kLZwDSix4rhIoEM&callback=initMap"></script>
 </body>
 
 </html>

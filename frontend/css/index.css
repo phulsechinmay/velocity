@@ -23,7 +23,8 @@
 }
 
 #right-panel {
-  height: 100%;
+  margin-top: 10px;
+  height: 550px;
   float: right;
   width: 390px;
   overflow-y: scroll;

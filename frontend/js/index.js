@@ -1,7 +1,7 @@
 // Initialize and add the map
 var showTrafficLayer = false;
 var showBikingLayer = false;
-var showDirectionPanel = false;
+var showDirectionPanel = true;
 var showBikeRoute = false;
 var displayRoute;
 var bikeRoute;
@@ -194,10 +194,12 @@ function initMap() {
     showBikeRoute = !showBikeRoute;
     directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute);
   });
+
   $('#showDirections').click(()=>{
     showDirectionPanel = !showDirectionPanel;
     directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
   });
+  directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();
   $("#showTraffic").click(() => {

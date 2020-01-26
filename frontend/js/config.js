@@ -1,3 +1,3 @@
 config = {
-  SERVER_URL: "http://velocities.tech"
+  SERVER_URL: "https://velocities.tech"
 }

@@ -244,6 +244,18 @@
             bikeLayer.setMap(null);
           }
         });
+        // Show current location
+        var im = 'http://www.robotwoods.com/dev/misc/bluecircle.png';
+        navigator.geolocation.getCurrentPosition((position) => {
+          var pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+          var myLatLng = new google.maps.LatLng(pos.lat, pos.lng);
+          var userMarker = new google.maps.Marker({
+              position: myLatLng,
+              map: map,
+              icon: im
+          });
+          map.setCenter(pos);
+        }, () => alert('navigator.geolocation failed, may not be supported'));
       }
         
     </script>

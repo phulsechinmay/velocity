@@ -92,7 +92,7 @@ function initMap() {
           bikeRoute = response;
           //directionsRenderer.setDirections(response);
         } else {
-          //window.alert("Directions request failed due to " + status);
+          window.alert("Directions request failed due to " + status);
         }
       }
     );
@@ -108,7 +108,7 @@ function initMap() {
           directionsRenderer.setDirections(response);
           displayBikeSuggestion();
         } else {
-          //window.alert("Directions request failed due to " + status);
+          window.alert("Directions request failed due to " + status);
         }
       }
     );
@@ -118,7 +118,7 @@ function initMap() {
     var bikeTime = bikeRoute.routes[0].legs[0].duration;
     var carTime = carRoute.routes[0].legs[0].duration;
     if(carTime["value"] > bikeTime["value"]){
-      $('#bikeMsg').text("Bike route is: "+bikeTime["text"]+" Current route is: "+carTime["text"]);
+      $('#bikeMsg').text("Bike Route is: "+bikeTime["text"]+"Current route is: "+carTime["text"]);
     }
   }
 

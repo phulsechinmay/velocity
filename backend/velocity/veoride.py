@@ -1,5 +1,6 @@
 from velocity import app, constants
 from flask import request, jsonify
+from geopy.distance import geodesic
 import requests
 
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/request_verification_code")
@@ -64,36 +65,55 @@ def get_walking_travel_info(origin, destinations):
 
   return walking_info
 
+def process_and_filter_bike_data(bike_data, user_loc):
+  # Only allow bikes with open locks
+  bike_data = list(filter(lambda bike: bike['lockStatus'] == 1, bike_data))
+  bike_data.sort(key=lambda bike: geodesic((bike['location']['lat'], bike['location']['lng']), user_loc))
+
+  # Trim down to MAX_NUM_BIKES before getting walking info from Google Maps
+  if len(bike_data) > constants.MAX_NUM_BIKES:
+    bike_data = bike_data[:constants.MAX_NUM_BIKES]
+
+  bike_locations = [(bike['location']['lat'], bike['location']['lng']) for bike in bike_data]
+
+  walking_travel_info = get_walking_travel_info(user_loc, bike_locations)
+
+  if walking_travel_info == None: return None
+  
+  # IMPORTANT: This does index based data manipulation, thus the order of bike_data & bike_locations / walking_travel_info must be the same
+  for i, travel_info in enumerate(walking_travel_info):
+    bike_data[i]["walking_time"] = travel_info["duration"]
+
+  bike_data.sort(key=lambda data: data["walking_time"])
+  # TODO: Add filtering according to num_bikes
+  return bike_data
+
+""" Returns: List of bikes and their data sorted by walking duration is ascending order
+"""
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/get_nearby_bikes")
 def veoride_get_nearby_bikes():
-  num_bikes = request.args.get('num_bikes')
+  num_bikes = int(request.args.get('num_bikes'))
   if not num_bikes:
-    num_bikes = constants.DEFAULT_NUM_BIKES
+    num_bikes = constants.MAX_NUM_BIKES
 
   user_token = request.args.get('user_token')
-  lat = request.args.get('lat')
-  lng = request.args.get('lng')
+  user_lat = request.args.get('lat')
+  user_lng = request.args.get('lng')
+  user_loc = (user_lat, user_lng)
 
   headers = {
       "Authorization": user_token
   }
-  bikes_result = requests.get(f"{constants.VEORIDE_API_PREFIX}/customers/vehicles?lat={lat}&lng={lng}", headers=headers)
+  bikes_result = requests.get(f"{constants.VEORIDE_API_PREFIX}/customers/vehicles?lat={user_lat}&lng={user_lng}", headers=headers)
   
   if bikes_result.status_code != 200:
     return jsonify({"error": "Error with fetching nearby bikes."}), 500
 
   bike_data = bikes_result.json()['data']
-  # TODO: Check if bike data is sorted by distance from user
-  if len(bike_data) > num_bikes:
-    bike_data = bike_data[:num_bikes]
 
-  bike_locations = [(bike['location']['lat'], bike['location']['lng']) for bike in bike_data]
-  walking_travel_info = get_walking_travel_info((lat, lng), bike_locations)
-  
-  for i, travel_info in enumerate(walking_travel_info):
-    bike_data[i]["walking_time"] = travel_info["duration"]
+  processed_bike_data = process_and_filter_bike_data(bike_data, user_loc)
+  if processed_bike_data == None:
+    return jsonify({"error": "Error in getting bike data"}), 500
 
-  bike_data.sort(key=lambda data: data["walking_time"])
-
-  return jsonify({"data": bike_data}), 200
+  return jsonify({"data": processed_bike_data}), 200
 

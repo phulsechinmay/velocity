@@ -64,6 +64,9 @@ def get_walking_travel_info(origin, destinations):
 
   return walking_info
 
+
+""" Returns: List of bikes and their data sorted by walking duration is ascending order
+"""
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/get_nearby_bikes")
 def veoride_get_nearby_bikes():
   num_bikes = request.args.get('num_bikes')

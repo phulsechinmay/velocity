@@ -391,7 +391,7 @@ function initMap() {
                           walkLeg.routes[0].warnings.pop();
                           directionsRenderer.setDirections(walkLeg);
                           currentRoute = walkLeg;
-                          updateCurrent(true);
+                          updateCurrent();
                         }
                         else{
                           window.alert('Directions request failed due to ' + status);
@@ -418,7 +418,7 @@ function initMap() {
                 walkLeg.routes[0].warnings.pop();
                 directionsRenderer.setDirections(walkLeg);
                 currentRoute = walkLeg;
-                updateCurrent();
+                updateCurrent(true);
               } else {
                 window.alert('Directions request failed due to ' + status);
               }

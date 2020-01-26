@@ -2,7 +2,6 @@
 var showTrafficLayer = false
 var showBikingLayer = false
 var showDirectionPanel = true
-var showBikeRoute = false
 var displayRoute
 var bikeRoute
 var carRoute
@@ -95,22 +94,24 @@ function initMap() {
       function(response, status) {
         if (status === 'OK') {
           bikeRoute = response
-        } else {
-          window.alert('Directions request failed due to ' + status)
-        }
-      }
-    )
-    directionsService.route(
-      {
-        origin: start,
-        destination: end,
-        travelMode: 'DRIVING',
-      },
-      function(response, status) {
-        if (status === 'OK') {
-          carRoute = response
-          directionsRenderer.setDirections(response)
-          displayBikeSuggestion()
+          bikeRoute.routes[0].warnings.pop()
+          //directionsRenderer.setDirections(response);
+          directionsService.route(
+            {
+              origin: start,
+              destination: end,
+              travelMode: 'DRIVING',
+            },
+            function(response, status) {
+              if (status === 'OK') {
+                carRoute = response
+                directionsRenderer.setDirections(response)
+                displayBikeSuggestion()
+              } else {
+                window.alert('Directions request failed due to ' + status)
+              }
+            }
+          )
         } else {
           window.alert('Directions request failed due to ' + status)
         }
@@ -121,14 +122,14 @@ function initMap() {
   function displayBikeSuggestion() {
     var bikeTime = bikeRoute.routes[0].legs[0].duration
     var carTime = carRoute.routes[0].legs[0].duration
-    if (carTime['value'] > bikeTime['value']) {
-      $('#bikeMsg').text(
-        'Bike Route is: ' +
-          bikeTime['text'] +
-          '\nCurrent route is: ' +
-          carTime['text']
-      )
-    }
+    $('#bikeMsg').text(
+      'Bike route is: ' +
+        bikeTime['text'])
+    $("#currentMsg").text(
+        'Current route is: ' +
+        carTime['text']
+    )
+    $("#bike-better-popup").show();
   }
 
   function route(origin, destination, travelMode) {
@@ -163,24 +164,24 @@ function initMap() {
         if (status === 'OK') {
           walkLeg = response
           //directionsRenderer.setDirections(response);
-        } else {
-          window.alert('Directions request failed due to ' + status)
-        }
-      }
-    )
-    directionsService.route(
-      {
-        origin: bike,
-        destination: destination,
-        travelMode: 'BICYCLING',
-      },
-      function(response, status) {
-        if (status === 'OK') {
-          bikeLeg = response
-          //directionsRenderer.setDirections(response);
-          walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
-          walkLeg.routes[0].warnings.pop()
-          directionsRenderer.setDirections(walkLeg)
+          directionsService.route(
+            {
+              origin: bike,
+              destination: destination,
+              travelMode: 'BICYCLING',
+            },
+            function(response, status) {
+              if (status === 'OK') {
+                bikeLeg = response
+                //directionsRenderer.setDirections(response);
+                walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
+                walkLeg.routes[0].warnings.pop()
+                directionsRenderer.setDirections(walkLeg)
+              } else {
+                window.alert('Directions request failed due to ' + status)
+              }
+            }
+          )
         } else {
           window.alert('Directions request failed due to ' + status)
         }
@@ -264,8 +265,8 @@ function initMap() {
     })
   }
   $('#showBikeRoute').click(() => {
-    showBikeRoute = !showBikeRoute
-    directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute)
+    directionsRenderer.setDirections(bikeRoute)
+    $("#bike-better-popup").hide();
   })
 
   $('#showDirections').click(() => {

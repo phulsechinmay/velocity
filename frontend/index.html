@@ -15,20 +15,20 @@
     <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
 
-<body>
+  <body>
     <h3>Velocity</h3>
 
     <div class="start">
-      <input type="text" id="startLocation" placeholder="Start">
+      <input type="text" id="startLocation" placeholder="Start" />
     </div>
     <div class="end">
-      <input type="text" id="endLocation" placeholder="End">
+      <input type="text" id="endLocation" placeholder="End" />
     </div>
 
-    <button class='button' id="showTraffic">Show Traffic</button>
-    <button class='button' id="showBikeLayer">Show Bike</button>
-    <br/>
-    <br/>
+    <button class="button" id="showTraffic">Show Traffic</button>
+    <button class="button" id="showBikeLayer">Show Bike</button>
+    <br />
+    <br />
     <!--The div element for the map -->
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>
@@ -77,8 +77,7 @@
           center: {
             lat: positions[0][0],
             lng: positions[0][1]
-          },
-          // mapTypeId: 'satellite'
+          }
         });
 
         positions.forEach(function(position) {
@@ -97,18 +96,21 @@
           const markers = [];
           for (var i = 1; i < rows.length; i++) {
             const x = rows[i].split(",");
-            const lat = parseFloat(x[2]);
-            const lng = parseFloat(x[3]);
+            const lock_open = parseInt(x[1]);
+            if (lock_open) {
+              const lat = parseFloat(x[2]);
+              const lng = parseFloat(x[3]);
 
-            markers.push(
-              new google.maps.Marker({
-                position: {
-                  lat,
-                  lng
-                },
-                map: map
-              })
-            );
+              markers.push(
+                new google.maps.Marker({
+                  position: {
+                    lat,
+                    lng
+                  },
+                  map: map
+                })
+              );
+            }
           }
           var markerCluster = new MarkerClusterer(map, markers, {
             imagePath:

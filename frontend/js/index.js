@@ -51,10 +51,6 @@ function initMap() {
   });
   directionsRenderer.setMap(map);
 
-  var control = document.getElementById("floating-panel");
-  control.style.display = "block";
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
-
   var defaultBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(30.5159362, -96.5171539),
     new google.maps.LatLng(30.7215865, -96.2252309)
@@ -162,18 +158,14 @@ function initMap() {
   });
 
   // The bikes, shown on the map
-  const url = "/bikes_near_zach.csv";
   const showMarkers = data => {
-    const rows = data.split("\n");
-    const header = rows[0];
     const markers = [];
-    for (var i = 1; i < rows.length; i++) {
-      const x = rows[i].split(",");
-      const lock_open = parseInt(x[1]);
+    for (var i = 1; i < data.length; i++) {
+      const bike_data = data[i];
+      const lock_open = bike_data.lockStatus;
       if (lock_open) {
-        const lat = parseFloat(x[2]);
-        const lng = parseFloat(x[3]);
-
+        const lat = bike_data.location.lat;
+        const lng = bike_data.location.lng;
         markers.push(
           new google.maps.Marker({
             position: {
@@ -199,7 +191,6 @@ function initMap() {
     showDirectionPanel = !showDirectionPanel;
     directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
   });
-  $.get(url, showMarkers);
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();
   $("#showTraffic").click(() => {

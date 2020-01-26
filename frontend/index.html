@@ -27,10 +27,10 @@
           id="bike-better-popup-cross"
         />
         <div class="text-block">We found a faster route for you!</div>
-        <div class="text-block-2">
-          Drive time: 10 minutes<br />Bike time: 8 minutes
+        <div id="bikeMsg" class="text-block-2">
+          Drive time: 10 minutes
         </div>
-        <a href="#" class="button w-button">Switch to bike</a>
+        <a href="#" class="button w-button" id="showBikeRoute">Switch to bike</a>
       </div>
 
       <!-- Sliding overlay window -->
@@ -66,7 +66,7 @@
                   ><label class="w-checkbox checkbox-field-2"
                     ><input
                       type="checkbox"
-                      id="bike-path-layer"
+                      id="bike-path-checkbox"
                       data-name="Bike Path Layer"
                       class="w-checkbox-input checkbox-2"
                     /><span class="checkbox-label w-form-label"
@@ -101,6 +101,7 @@
               </form>
             </div>
             <div style="padding-right: 5px; padding-left: 5px;">
+              <div id="bikeLayerInfo"></div>
               <div id="right-panel"></div>
             </div>
           </nav>
@@ -112,7 +113,7 @@
     </div>
 
     <div id="map"></div>
-    <p id="bikeLayerInfo"></p>
+    <!--<p id="bikeLayerInfo"></p>-->
 
     <!--
     <div id="floating-panel">

@@ -121,14 +121,14 @@ function initMap() {
   function displayBikeSuggestion() {
     var bikeTime = bikeRoute.routes[0].legs[0].duration
     var carTime = carRoute.routes[0].legs[0].duration
-    if (carTime['value'] > bikeTime['value']) {
-      $('#bikeMsg').text(
-        'Bike Route is: ' +
-          bikeTime['text'] +
-          'Current route is: ' +
-          carTime['text']
-      )
-    }
+    $('#bikeMsg').text(
+      'Bike route is: ' +
+        bikeTime['text'])
+    $("#currentMsg").text(
+        'Current route is: ' +
+        carTime['text']
+    )
+    $("#bike-better-popup").show();
   }
 
   function walkToBike(origin, bike, destination) {
@@ -158,13 +158,13 @@ function initMap() {
           bikeLeg = response
           //directionsRenderer.setDirections(response);
           walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
+          walkLeg.routes[0].warnings.pop()
           directionsRenderer.setDirections(walkLeg)
         } else {
           window.alert('Directions request failed due to ' + status)
         }
       }
     )
-    
   }
 
   var parking = {
@@ -203,8 +203,8 @@ function initMap() {
   })
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
-    const pos = bikeMarker.getPosition();
-    walkToBike($("#start").val(), pos.lat() + "," + pos.lng(), $("#end").val());
+    const pos = bikeMarker.getPosition()
+    walkToBike($('#start').val(), pos.lat() + ',' + pos.lng(), $('#end').val())
   }
   // Show bikes on map
   const showBikeMarkers = data => {
@@ -237,6 +237,7 @@ function initMap() {
   $('#showBikeRoute').click(() => {
     showBikeRoute = !showBikeRoute
     directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute)
+    $("#bike-better-popup").hide();
   })
 
   $('#showDirections').click(() => {
@@ -250,13 +251,13 @@ function initMap() {
   )
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer()
-  $('#showTraffic').click(() => {
+  $('#traffic-layer-checkbox').click(() => {
     showTrafficLayer = !showTrafficLayer
     trafficLayer.setMap(showTrafficLayer ? map : null)
   })
   // Show bike layer
   var bikeLayer = new google.maps.BicyclingLayer()
-  $('#showBikeLayer').click(() => {
+  $('#bike-path-checkbox').click(() => {
     showBikingLayer = !showBikingLayer
     if (showBikingLayer) {
       $('#bikeLayerInfo').text(

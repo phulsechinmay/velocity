@@ -63,7 +63,7 @@ function initMap() {
       {
         origin: start,
         destination: end,
-        travelMode: "BYCYCLING"
+        travelMode: "BICYCLING"
       },
       function(response, status) {
         if (status === "OK") {

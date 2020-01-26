@@ -87,10 +87,10 @@
             };
 
             var map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 18,
+                zoom: 15,
                 center: {
-                    lat: positions[0][0],
-                    lng: positions[0][1]
+                    lat: positions[13][0],
+                    lng: positions[13][1]
                 }
             });
 
@@ -133,7 +133,8 @@
                                     lat,
                                     lng
                                 },
-                                map: map
+                                map: map,
+                                icon: bike
                             })
                         );
                     }

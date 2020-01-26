@@ -1,6 +1,11 @@
 // Initialize and add the map
 var showTrafficLayer = false;
 var showBikingLayer = false;
+var showDirectionPanel = false;
+var showBikeRoute = false;
+var displayRoute;
+var bikeRoute;
+var carRoute;
 
 function initMap() {
   const positions = [
@@ -45,7 +50,9 @@ function initMap() {
     }
   });
   directionsRenderer.setMap(map);
-  directionsRenderer.setPanel(document.getElementById("right-panel"));
+  if(showDirectionPanel){
+    directionsRenderer.setPanel(document.getElementById("right-panel"));
+  }
 
   var control = document.getElementById("floating-panel");
   control.style.display = "block";
@@ -82,12 +89,37 @@ function initMap() {
       },
       function(response, status) {
         if (status === "OK") {
-          directionsRenderer.setDirections(response);
+          bikeRoute = response;
+          //directionsRenderer.setDirections(response);
         } else {
-          window.alert("Directions request failed due to " + status);
+          //window.alert("Directions request failed due to " + status);
         }
       }
     );
+    directionsService.route(
+      {
+        origin: start,
+        destination: end,
+        travelMode: "DRIVING"
+      },
+      function(response, status) {
+        if (status === "OK") {
+          carRoute = response;
+          directionsRenderer.setDirections(response);
+          displayBikeSuggestion();
+        } else {
+          //window.alert("Directions request failed due to " + status);
+        }
+      }
+    );
+  }
+
+  function displayBikeSuggestion(){
+    var bikeTime = bikeRoute.routes[0].legs[0].duration;
+    var carTime = carRoute.routes[0].legs[0].duration;
+    if(carTime["value"] > bikeTime["value"]){
+      $('#bikeMsg').text("Bike route is: "+bikeTime["text"]+" Current route is: "+carTime["text"]);
+    }
   }
 
   var parking = {
@@ -154,6 +186,14 @@ function initMap() {
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
     });
   };
+  $('#showBikeRoute').click(()=>{
+    showBikeRoute = !showBikeRoute;
+    directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute);
+  });
+  $('#showDirections').click(()=>{
+    showDirectionPanel = !showDirectionPanel;
+    console.log("showDirections: ",showDirectionPanel);
+  });
   $.get(url, showMarkers);
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();

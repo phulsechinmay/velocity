@@ -27,10 +27,10 @@
           id="bike-better-popup-cross"
         />
         <div class="text-block">We found a faster route for you!</div>
-        <div class="text-block-2">
+        <div id="bikeMsg" class="text-block-2">
           Drive time: 10 minutes<br />Bike time: 8 minutes
         </div>
-        <a href="#" class="button w-button">Switch to bike</a>
+        <a href="#" class="button w-button" id="showBikeRoute">Switch to bike</a>
       </div>
 
       <!-- Sliding overlay window -->
@@ -102,6 +102,7 @@
                 </div>
             </div>
             <div style="padding-right: 10px;">
+              <div id="bikeLayerInfo"></div>
               <div id="right-panel"></div>
             </div>
           </nav>
@@ -112,9 +113,9 @@
       </div>
     </div>
 
-    <div id="right-panel"></div>
+    <!--<div id="right-panel"></div>-->
     <div id="map"></div>
-    <p id="bikeLayerInfo"></p>
+    <!--<p id="bikeLayerInfo"></p>-->
 
     <!--
     <div id="floating-panel">

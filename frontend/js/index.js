@@ -125,7 +125,7 @@ function initMap() {
       $('#bikeMsg').text(
         'Bike Route is: ' +
           bikeTime['text'] +
-          'Current route is: ' +
+          '\nCurrent route is: ' +
           carTime['text']
       )
     }
@@ -251,13 +251,13 @@ function initMap() {
   )
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer()
-  $('#showTraffic').click(() => {
+  $('#traffic-layer-checkbox').click(() => {
     showTrafficLayer = !showTrafficLayer
     trafficLayer.setMap(showTrafficLayer ? map : null)
   })
   // Show bike layer
   var bikeLayer = new google.maps.BicyclingLayer()
-  $('#showBikeLayer').click(() => {
+  $('#bike-path-checkbox').click(() => {
     showBikingLayer = !showBikingLayer
     if (showBikingLayer) {
       $('#bikeLayerInfo').text(

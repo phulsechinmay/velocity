@@ -2,8 +2,10 @@
 var showTrafficLayer = false;
 var showBikingLayer = false;
 
+
+
 function initMap() {
-  const positions = [
+  const STATION_POSITIONS = [
     [30.6229431, -96.3369853],
     [30.6223614, -96.3397319],
     [30.6212282, -96.3409694],
@@ -41,8 +43,8 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
     zoom: 15,
     center: {
-      lat: positions[13][0],
-      lng: positions[13][1]
+      lat: STATION_POSITIONS[13][0],
+      lng: STATION_POSITIONS[13][1]
     }
   });
   directionsRenderer.setMap(map);
@@ -92,7 +94,7 @@ function initMap() {
 
   var markers = [];
 
-  positions.forEach(function(position) {
+  STATION_POSITIONS.forEach(function(position) {
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(position[0], position[1]),
       icon: parking,
@@ -109,38 +111,6 @@ function initMap() {
       markers[i].setVisible(zoom >= 15);
     }
   });
-
-  // The bikes, shown on the map
-  const url = "/bikes_near_zach.csv";
-  const showMarkers = data => {
-    const rows = data.split("\n");
-    const header = rows[0];
-    const markers = [];
-    for (var i = 1; i < rows.length; i++) {
-      const x = rows[i].split(",");
-      const lock_open = parseInt(x[1]);
-      if (lock_open) {
-        const lat = parseFloat(x[2]);
-        const lng = parseFloat(x[3]);
-
-        markers.push(
-          new google.maps.Marker({
-            position: {
-              lat,
-              lng
-            },
-            map: map,
-            icon: bike
-          })
-        );
-      }
-    }
-    var markerCluster = new MarkerClusterer(map, markers, {
-      imagePath:
-        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-    });
-  };
-  $.get(url, showMarkers);
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();
   $("#showTraffic").click(() => {
@@ -161,6 +131,35 @@ function initMap() {
       bikeLayer.setMap(null);
     }
   });
+
+
+  const showMarkers = data => {
+    const markers = [];
+    for (var i = 1; i < data.length; i++) {
+      const bike_data = data[i];
+      const lock_open = bike_data.lockStatus;
+      if (lock_open) {
+        const lat = bike_data.location.lat;
+        const lng = bike_data.location.lng;
+
+        markers.push(
+          new google.maps.Marker({
+            position: {
+              lat,
+              lng
+            },
+            map: map,
+            icon: bike
+          })
+        );
+      }
+    }
+    var markerCluster = new MarkerClusterer(map, markers, {
+      imagePath:
+        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
+    });
+  };
+
   // Show current location
   var im = "http://www.robotwoods.com/dev/misc/bluecircle.png";
   navigator.geolocation.getCurrentPosition(
@@ -176,7 +175,19 @@ function initMap() {
         icon: im
       });
       map.setCenter(pos);
+
+      getNearbyBikes(pos.lat, pos.lng)
+        .then(function (data){
+          showMarkers(data);
+        })
+        .catch(function (err){
+          alert(err);
+        });
     },
     () => alert("navigator.geolocation failed, may not be supported")
   );
+
+  // The bikes, shown on the map
+  const url = "/bikes_near_zach.csv";
+  $.get(url, showMarkers);
 }

@@ -69,7 +69,7 @@ def get_walking_travel_info(origin, destinations):
 """
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/get_nearby_bikes")
 def veoride_get_nearby_bikes():
-  num_bikes = request.args.get('num_bikes')
+  num_bikes = int(request.args.get('num_bikes'))
   if not num_bikes:
     num_bikes = constants.DEFAULT_NUM_BIKES
 

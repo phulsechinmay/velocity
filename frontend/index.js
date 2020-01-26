@@ -2,8 +2,6 @@
 var showTrafficLayer = false;
 var showBikingLayer = false;
 
-
-
 function initMap() {
   const STATION_POSITIONS = [
     [30.6229431, -96.3369853],
@@ -36,11 +34,12 @@ function initMap() {
     [30.6013654, -96.3543799]
   ];
 
-  var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+  var iconBase =
+    "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
   var directionsService = new google.maps.DirectionsService();
   var directionsRenderer = new google.maps.DirectionsRenderer();
   var map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 15,
+    zoom: 18,
     center: {
       lat: STATION_POSITIONS[13][0],
       lng: STATION_POSITIONS[13][1]
@@ -54,25 +53,31 @@ function initMap() {
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 
   var defaultBounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(30.5159362,-96.5171539),
-    new google.maps.LatLng(30.7215865,-96.2252309)
+    new google.maps.LatLng(30.5159362, -96.5171539),
+    new google.maps.LatLng(30.7215865, -96.2252309)
   );
-  var startAutocomplete = new google.maps.places.Autocomplete(document.getElementById('start'), {
-    bounds: defaultBounds,
-    strictBounds: true
-  });
+  var startAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById("start"),
+    {
+      bounds: defaultBounds,
+      strictBounds: true
+    }
+  );
 
   var onChangeHandler = function() {
     calculateAndDisplayRoute(directionsService, directionsRenderer);
   };
-  startAutocomplete.addListener("place_changed", function(){
-    var endAutocomplete = new google.maps.places.Autocomplete(document.getElementById('end'), {
-      bounds: defaultBounds,
-      strictBounds: true
-    });
-    endAutocomplete.addListener("place_changed",onChangeHandler);
+  startAutocomplete.addListener("place_changed", function() {
+    var endAutocomplete = new google.maps.places.Autocomplete(
+      document.getElementById("end"),
+      {
+        bounds: defaultBounds,
+        strictBounds: true
+      }
+    );
+    endAutocomplete.addListener("place_changed", onChangeHandler);
   });
-  
+
   function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     var start = document.getElementById("start").value;
     var end = document.getElementById("end").value;
@@ -146,7 +151,6 @@ function initMap() {
     }
   });
 
-
   const showMarkers = data => {
     const markers = [];
     for (var i = 1; i < data.length; i++) {
@@ -168,42 +172,39 @@ function initMap() {
         );
       }
     }
-    var markerCluster = new MarkerClusterer(map, markers, {
+    // Cluster bikes
+    new MarkerClusterer(map, markers, {
       imagePath:
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       minimumClusterSize: 10,
-      gridSize: 30,
+      gridSize: 30
     });
   };
 
-  // Show current location
+  
   var im = "http://www.robotwoods.com/dev/misc/bluecircle.png";
+  // Get current location
   navigator.geolocation.getCurrentPosition(
     position => {
       var pos = {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-      var myLatLng = new google.maps.LatLng(pos.lat, pos.lng);
-      var userMarker = new google.maps.Marker({
-        position: myLatLng,
+      // Show current location
+      new google.maps.Marker({
+        position: new google.maps.LatLng(pos.lat, pos.lng),
         map: map,
         icon: im
       });
       map.setCenter(pos);
-
+      // Get nearby bikes
       getNearbyBikes(pos.lat, pos.lng)
-        .then(function (data){
-          showMarkers(data);
-        })
-        .catch(function (err){
-          alert(err);
-        });
+        .then(showMarkers)
+        .catch(alert);
+      // Fill current location in start box
+      $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5))
+
     },
     () => alert("navigator.geolocation failed, may not be supported")
   );
-
-  // The bikes, shown on the map
-  const url = "/bikes_near_zach.csv";
-  $.get(url, showMarkers);
 }

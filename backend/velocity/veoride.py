@@ -131,7 +131,7 @@ def veoride_get_nearby_stations():
   station_data = [None for _ in constants.BIKE_STATION_LOCATIONS]
   for i, travel_info in enumerate(walking_travel_info):
     station = {}
-    station["lat"], station["lat"]= constants.BIKE_STATION_LOCATIONS[i][0], constants.BIKE_STATION_LOCATIONS[i][1]
+    station["lat"], station["lng"]= constants.BIKE_STATION_LOCATIONS[i][0], constants.BIKE_STATION_LOCATIONS[i][1]
     station["walking_time"] = travel_info["duration"]
     station_data[i] = station
 

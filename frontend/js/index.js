@@ -162,7 +162,7 @@ function initMap() {
         }
       }
     )
-    walkLeg.route[0].legs.push(bikeLeg.route[0].legs[0])
+    walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
     directionsRenderer.setDirections(walkLeg)
   }
 
@@ -202,8 +202,10 @@ function initMap() {
   })
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
-    const pos = bikeMarker.getPosition()
-    console.log(pos)
+    const pos = bikeMarker.getPosition();
+    console.log(pos.lat());
+    console.log(pos.lng());
+    walkToBike($("#start").val, pos.lat() + "," + pos.lng(), $("#end").val);
   }
   // Show bikes on map
   const showBikeMarkers = data => {

@@ -17,10 +17,11 @@
   line-height: 30px;
   padding-left: 10px;
 }
+
 #right-panel {
   font-family: "Roboto", "sans-serif";
   line-height: 30px;
-  padding-left: 10px;
+  margin-right: 10px;
 }
 
 #right-panel select,

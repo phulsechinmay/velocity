@@ -59,25 +59,33 @@ function initMap() {
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
 
   var defaultBounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(30.5159362,-96.5171539),
-    new google.maps.LatLng(30.7215865,-96.2252309)
+    new google.maps.LatLng(30.5159362, -96.5171539),
+    new google.maps.LatLng(30.7215865, -96.2252309)
   );
-  var startAutocomplete = new google.maps.places.Autocomplete(document.getElementById('start'), {
-    bounds: defaultBounds,
-    strictBounds: true
-  });
-
   var onChangeHandler = function() {
-    calculateAndDisplayRoute(directionsService, directionsRenderer);
+    if ($("#start").val() !== "" & $("#end").val() !== "") {
+      calculateAndDisplayRoute(directionsService, directionsRenderer);
+    }
   };
-  startAutocomplete.addListener("place_changed", function(){
-    var endAutocomplete = new google.maps.places.Autocomplete(document.getElementById('end'), {
+
+  const startAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById("start"),
+    {
       bounds: defaultBounds,
       strictBounds: true
-    });
-    endAutocomplete.addListener("place_changed",onChangeHandler);
-  });
-  
+    }
+  );
+  startAutocomplete.addListener("place_changed", onChangeHandler);
+
+  const endAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById("end"),
+    {
+      bounds: defaultBounds,
+      strictBounds: true
+    }
+  );
+  endAutocomplete.addListener("place_changed", onChangeHandler);
+
   function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     var start = document.getElementById("start").value;
     var end = document.getElementById("end").value;
@@ -192,7 +200,6 @@ function initMap() {
   });
   $('#showDirections').click(()=>{
     showDirectionPanel = !showDirectionPanel;
-    console.log("showDirections: ",showDirectionPanel);
   });
   $.get(url, showMarkers);
   // Show traffic
@@ -230,7 +237,15 @@ function initMap() {
         icon: im
       });
       map.setCenter(pos);
+      // Get nearby bikes
+      getNearbyBikes(pos.lat, pos.lng)
+        .then(showMarkers)
+        .catch(alert);
+      // Fill current location in start box
+      $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5));
     },
     () => alert("navigator.geolocation failed, may not be supported")
   );
+  // Clear start input box if user places cursor into box
+  $("#start").click(() => $("#start").val(""));
 }

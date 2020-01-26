@@ -24,7 +24,7 @@
     <div class="end">
       <input type="text" id="endLocation" placeholder="End">
     </div>
-
+    <button class='button' id="showRoute">Show Route</button>
     <button class='button' id="showTraffic">Show Traffic</button>
     <button class='button' id="showBikeLayer">Show Bike</button>
     <br/>
@@ -71,7 +71,8 @@
 
         var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
         var parking = iconBase + "parking_lot_maps.png";
-
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRenderer = new google.maps.DirectionsRenderer();
         var map = new google.maps.Map(document.getElementById("map"), {
           zoom: 13,
           center: {
@@ -79,6 +80,7 @@
             lng: positions[0][1]
           }
         });
+        directionsRenderer.setMap(map);
 
         positions.forEach(function(position) {
           var marker = new google.maps.Marker({
@@ -131,27 +133,31 @@
             );
             bikeLayer.setMap(map);
           } else {
+            $("#bikeLayerInfo").text(' ');
             bikeLayer.setMap(null);
           }
         });
-      }
-      //plots route
-      function calcRoute() {
-        var start = document.getElementById("start").value;
-        var end = document.getElementById("end").value;
-        var stops = document.getElementById("stops").value;
-        var request = {
-          origin: start,
-          destination: end,
-          waypoints: stops,
-          travelMode: "DRIVING"
-        };
-        directionsService.route(request, function(result, status) {
-          if (status == "OK") {
-            directionsRenderer.setDirections(result);
-          }
+        $("#showRoute").click(() => {
+          console.log("Calculating...")
+          var start = document.getElementById("start").value;
+          var end = document.getElementById("end").value;
+          var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'BICYCLING'
+          };
+          directionsService.route(request, function(result, status) {
+            if (status == "OK") {
+              directionsRenderer.setDirections(result);
+            }
+            else{
+              console.log("DIRECTIONS API ERROR");
+            }
+          });
         });
       }
+      //plots route
+        
     </script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <!--Load the API from the specified URL

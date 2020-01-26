@@ -12,6 +12,58 @@
         width: 100%;
         /* The width is the width of the web page */
       }
+      /* Optional: Makes the sample page fill the window. */
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      #right-panel {
+        height: 100%;
+        float: right;
+        width: 390px;
+        overflow: auto;
+      }
+      #floating-panel {
+        background: #fff;
+        padding: 5px;
+        font-size: 14px;
+        font-family: Arial;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);
+        display: none;
+      }
+      @media print {
+        #right-panel {
+          float: none;
+          width: auto;
+        }
+      }
     </style>
     <link rel="stylesheet" type="text/css" href="index.css" />
 </head>
@@ -19,11 +71,9 @@
 <body>
     <h3>Velocity</h3>
 
-    <div class="start">
-      <input type="text" id="startLocation" placeholder="Start" />
-    </div>
-    <div class="end">
-      <input type="text" id="endLocation" placeholder="End" />
+    <div id="floating-panel">
+      <input type="text" id="start" placeholder="Start" />
+      <input type="text" id="end" placeholder="End" />
     </div>
     <button class="button" id="showRoute">Show Route</button>
     <button class="button" id="showTraffic">Show Traffic</button>
@@ -31,6 +81,7 @@
     <br />
     <br />
     <!--The div element for the map -->
+    <div id="right-panel"></div>
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>
     <script>
@@ -72,8 +123,8 @@
 
         var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
         var parking = iconBase + "parking_lot_maps.png";
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRenderer = new google.maps.DirectionsRenderer();
+        var directionsService = new google.maps.DirectionsService;
+        var directionsRenderer = new google.maps.DirectionsRenderer;
         var map = new google.maps.Map(document.getElementById("map"), {
           zoom: 18,
           center: {
@@ -82,6 +133,32 @@
           }
         });
         directionsRenderer.setMap(map);
+        directionsRenderer.setPanel(document.getElementById('right-panel'));
+
+        var control = document.getElementById('floating-panel');
+        control.style.display = 'block';
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(control);
+
+        var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsRenderer);
+        };
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+        function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+          var start = document.getElementById('start').value;
+          var end = document.getElementById('end').value;
+          directionsService.route({
+            origin: start,
+            destination: end,
+            travelMode: 'DRIVING'
+          }, function(response, status) {
+            if (status === 'OK') {
+              directionsRenderer.setDirections(response);
+            } else {
+              window.alert('Directions request failed due to ' + status);
+            }
+          });
+        }
 
             var parking = {
                 url: iconBase + "paddle/P.png",
@@ -133,24 +210,6 @@
             $("#bikeLayerInfo").text(' ');
             bikeLayer.setMap(null);
           }
-        });
-        $("#showRoute").click(() => {
-          console.log("Calculating...")
-          var start = document.getElementById("start").value;
-          var end = document.getElementById("end").value;
-          var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'BICYCLING'
-          };
-          directionsService.route(request, function(result, status) {
-            if (status == "OK") {
-              directionsRenderer.setDirections(result);
-            }
-            else{
-              console.log("DIRECTIONS API ERROR");
-            }
-          });
         });
       }
         

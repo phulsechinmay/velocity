@@ -153,6 +153,7 @@ function initMap() {
       imagePath:
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       minimumClusterSize: 10,
+      gridSize: 30,
     });
   };
   $.get(url, showMarkers);

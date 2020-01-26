@@ -157,8 +157,12 @@ function initMap() {
       stationMarkers[i].setVisible(zoom >= 15);
     }
   });
-
-  // The bikes, shown on the map
+  // Function that gets called if you click bike marker
+  const chooseBike = (bikeMarker) => {
+    const pos = bikeMarker.getPosition();
+    console.log(pos);
+  }
+  // Show bikes on map
   const showBikeMarkers = data => {
     const bikeMarkers = [];
     for (var i = 1; i < data.length; i++) {
@@ -175,6 +179,7 @@ function initMap() {
           map: map,
           icon: bike
         });
+        bikeMarker.addListener('click', () => chooseBike(bikeMarker));
         bikeMarkers.push(bikeMarker);
       }
     }

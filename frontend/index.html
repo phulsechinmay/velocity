@@ -8,13 +8,32 @@
         width: 100%;
       }
     </style>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
     <link rel="stylesheet" type="text/css" href="css/webflow.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
   </head>
 
-  <body>
+  <body class="body">
 
     <div>
+
+      <!-- Popup box for bike trips being better -->
+      <div id="bike-better-popup" class="div-block-2" style="display: block;">
+        <img
+          src="img/x.png"
+          width="10"
+          height="10"
+          alt=""
+          class="image-4"
+          id="bike-better-popup-cross"
+        />
+        <div class="text-block">We found a faster route for you!</div>
+        <div class="text-block-2">
+          Drive time: 10 minutes<br />Bike time: 8 minutes
+        </div>
+        <a href="#" class="button w-button">Switch to bike</a>
+      </div>
+
+      <!-- Sliding overlay window -->
       <div
         data-collapse="all"
         data-animation="over-left"
@@ -28,7 +47,32 @@
               width="343"
               alt=""
               class="image-2"
+              style="cursor: hand;"
             />
+            <form
+              id="layer-form"
+              class="form"
+            >
+              <label class="w-checkbox checkbox-field"
+                ><input
+                  type="checkbox"
+                  id="traffic-layer-checkbox"
+                  data-name="Traffic layer"
+                  class="w-checkbox-input checkbox"
+                /><span class="checkbox-label-2 w-form-label"
+                  >Traffic layer</span
+                ></label
+              ><label class="w-checkbox checkbox-field-2"
+                ><input
+                  type="checkbox"
+                  id="bike-path-checkbox"
+                  data-name="Bike path layer"
+                  class="w-checkbox-input checkbox-2"
+                /><span class="checkbox-label w-form-label"
+                  >Bike path layer</span
+                ></label
+              >
+            </form>
             <div>
                 <div class="container-2 w-container"></div>
                 <div>
@@ -99,6 +143,7 @@
     <script src="js/config.js"></script>
     <script src="js/veoride.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/misc-handlers.js"></script>
     
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads

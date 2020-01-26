@@ -13,7 +13,7 @@
   </head>
 
   <body>
-    
+
     <div>
       <div
         data-collapse="all"
@@ -77,9 +77,12 @@
       <input type="text" id="start" placeholder="Start" />
       <input type="text" id="end" placeholder="End" />
     </div>
-    <button class="button" id="showRoute">Show Route</button>
+    <button class="button" id="showBikeRoute">Show Bike Route</button>
+    <button class="button" id="showDirections">Show Directions</button>
     <button class="button" id="showTraffic">Show Traffic</button>
     <button class="button" id="showBikeLayer">Show Bike</button>
+    <br />
+    <div id="bikeMsg"></div>
     <br />
     <br />
     <div id="right-panel"></div>
@@ -92,10 +95,10 @@
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 
     <!-- Custom JS Files -->
-    <script src="/webflow.js"></script>
-    <script src="/config.js"></script>
-    <script src="/veoride.js"></script>
-    <script src="index.js"></script>
+    <script src="js/webflow.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/veoride.js"></script>
+    <script src="js/index.js"></script>
     
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads

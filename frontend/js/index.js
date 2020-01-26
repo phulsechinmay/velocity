@@ -121,14 +121,14 @@ function initMap() {
   function displayBikeSuggestion() {
     var bikeTime = bikeRoute.routes[0].legs[0].duration
     var carTime = carRoute.routes[0].legs[0].duration
-    if (carTime['value'] > bikeTime['value']) {
-      $('#bikeMsg').text(
-        'Bike Route is: ' +
-          bikeTime['text'] +
-          '\nCurrent route is: ' +
-          carTime['text']
-      )
-    }
+    $('#bikeMsg').text(
+      'Bike route is: ' +
+        bikeTime['text'])
+    $("#currentMsg").text(
+        'Current route is: ' +
+        carTime['text']
+    )
+    $("#bike-better-popup").show();
   }
 
   function walkToBike(origin, bike, destination) {
@@ -238,6 +238,7 @@ function initMap() {
   $('#showBikeRoute').click(() => {
     showBikeRoute = !showBikeRoute
     directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute)
+    $("#bike-better-popup").hide();
   })
 
   $('#showDirections').click(() => {

@@ -25,7 +25,7 @@
     <div class="end">
         <input type="text" id="endLocation" placeholder="End" />
     </div>
-
+    <button class="button" id="showRoute">Show Route</button>
     <button class="button" id="showTraffic">Show Traffic</button>
     <button class="button" id="showBikeLayer">Show Bike</button>
     <br />
@@ -37,48 +37,6 @@
         // Initialize and add the map
         var showTrafficLayer = false;
         var showBikingLayer = false;
-
-        // The bikes, shown on the map
-        const url = "/bikes_near_zach.csv";
-        const showMarkers = data => {
-            const rows = data.split("\n");
-            const header = rows[0];
-            const markers = [];
-            for (var i = 1; i < rows.length; i++) {
-                const x = rows[i].split(",");
-                const lat = parseFloat(x[2]);
-                const lng = parseFloat(x[3]);
-
-                markers.push(
-                    new google.maps.Marker({
-                        position: {
-                            lat,
-                            lng
-                        },
-                        map: map,
-                        icon: bike
-                    })
-                );
-            }
-            var markerCluster = new MarkerClusterer(map, markers, {
-                imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
-            });
-        };
-        $.get(url, showMarkers);
-        // Show traffic
-        $("#showTraffic").click(() => {
-            var trafficLayer = new google.maps.TrafficLayer();
-            trafficLayer.setMap(map);
-        });
-        // Show bike layer
-        $("#showBikeLayer").click(() => {
-            var bikeLayer = new google.maps.BicyclingLayer();
-            bikeLayer.setMap(map);
-            $("#bikeLayerInfo").text(
-                "Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage."
-            );
-        });
-        }
 
         function initMap() {
             const positions = [

@@ -56,27 +56,29 @@ function initMap() {
     new google.maps.LatLng(30.5159362, -96.5171539),
     new google.maps.LatLng(30.7215865, -96.2252309)
   );
-  var startAutocomplete = new google.maps.places.Autocomplete(
+  var onChangeHandler = function() {
+    if ($("#start").val() !== "" & $("#end").val() !== "") {
+      calculateAndDisplayRoute(directionsService, directionsRenderer);
+    }
+  };
+
+  const startAutocomplete = new google.maps.places.Autocomplete(
     document.getElementById("start"),
     {
       bounds: defaultBounds,
       strictBounds: true
     }
   );
+  startAutocomplete.addListener("place_changed", onChangeHandler);
 
-  var onChangeHandler = function() {
-    calculateAndDisplayRoute(directionsService, directionsRenderer);
-  };
-  startAutocomplete.addListener("place_changed", function() {
-    var endAutocomplete = new google.maps.places.Autocomplete(
-      document.getElementById("end"),
-      {
-        bounds: defaultBounds,
-        strictBounds: true
-      }
-    );
-    endAutocomplete.addListener("place_changed", onChangeHandler);
-  });
+  const endAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById("end"),
+    {
+      bounds: defaultBounds,
+      strictBounds: true
+    }
+  );
+  endAutocomplete.addListener("place_changed", onChangeHandler);
 
   function calculateAndDisplayRoute(directionsService, directionsRenderer) {
     var start = document.getElementById("start").value;
@@ -181,7 +183,6 @@ function initMap() {
     });
   };
 
-  
   var im = "http://www.robotwoods.com/dev/misc/bluecircle.png";
   // Get current location
   navigator.geolocation.getCurrentPosition(
@@ -202,8 +203,7 @@ function initMap() {
         .then(showMarkers)
         .catch(alert);
       // Fill current location in start box
-      $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5))
-
+      $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5));
     },
     () => alert("navigator.geolocation failed, may not be supported")
   );

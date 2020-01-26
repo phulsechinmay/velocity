@@ -34,8 +34,7 @@ function initMap() {
     [30.6013654, -96.3543799]
   ];
 
-  var iconBase = "https://maps.google.com/mapfiles/kml/shapes/";
-  var parking = iconBase + "parking_lot_maps.png";
+  var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
   var directionsService = new google.maps.DirectionsService();
   var directionsRenderer = new google.maps.DirectionsRenderer();
   var map = new google.maps.Map(document.getElementById("map"), {
@@ -92,14 +91,14 @@ function initMap() {
   }
 
   var parking = {
-    url: iconBase + "paddle/P.png",
+    url: iconBase + "parking_lot_maps.png",
     scaledSize: new google.maps.Size(30, 30),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(0, 0)
   };
 
   var bike = {
-    url: iconBase + "shapes/cycling.png",
+    url: "cycling.png",
     scaledSize: new google.maps.Size(30, 30),
     origin: new google.maps.Point(0, 0),
     anchor: new google.maps.Point(0, 0)

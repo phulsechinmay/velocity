@@ -76,7 +76,7 @@ def process_and_filter_bike_data(bike_data, user_loc):
   bike_locations = [(bike['location']['lat'], bike['location']['lng']) for bike in bike_data]
 
   encoded_user_loc = f"{user_loc[0]},{user_loc[1]}"
-  walking_travel_info = get_walking_travel_info(user_loc, bike_locations)
+  walking_travel_info = get_walking_travel_info(encoded_user_loc, bike_locations)
 
   if walking_travel_info == None: return None
   

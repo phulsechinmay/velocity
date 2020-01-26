@@ -9,6 +9,9 @@ var carRoute;
 var walkLeg;
 var bikeLeg;
 var currentRoute;
+var currentPosition;
+
+const getStartLocation = () => currentPosition || $('#start').val();
 
 function initMap() {
   const positions = [
@@ -60,13 +63,15 @@ function initMap() {
     new google.maps.LatLng(30.7215865, -96.2252309)
   );
   var onChangeHandler = function() {
-    if (($('#start').val() !== '') & ($('#end').val() !== '')) {
-      calculateAndDisplayRoute(directionsService, directionsRenderer);
+    const start = getStartLocation();
+    const end = $('#end').val();
+    if (start && end) {
+      calculateAndDisplayRoute(start, end);
     }
   };
 
   const startAutocomplete = new google.maps.places.Autocomplete(
-    document.getElementById('start'),
+    getStartLocation(),
     {
       bounds: defaultBounds,
       strictBounds: true,
@@ -83,24 +88,21 @@ function initMap() {
   );
   endAutocomplete.addListener('place_changed', onChangeHandler);
 
-  function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-    var start = document.getElementById('start').value;
-    var end = document.getElementById('end').value;
+  function calculateAndDisplayRoute(origin, destination) {
     directionsService.route(
       {
-        origin: start,
-        destination: end,
+        origin,
+        destination,
         travelMode: 'BICYCLING',
       },
       function(response, status) {
         if (status === 'OK') {
           bikeRoute = response;
           bikeRoute.routes[0].warnings.pop();
-          //directionsRenderer.setDirections(response);
           directionsService.route(
             {
-              origin: start,
-              destination: end,
+              origin,
+              destination,
               travelMode: 'DRIVING',
             },
             function(response, status) {
@@ -223,9 +225,9 @@ function initMap() {
   // Function that gets called if you click bike marker
   const chooseBike = bikeMarker => {
     const pos = bikeMarker.getPosition();
-    const start = $('#start').val();
+    const start = getStartLocation();
     const end = $('#end').val();
-    if (start & end) {
+    if (start && end) {
       walkThenBike(start, pos.lat() + ',' + pos.lng(), end);
     } else if (start) {
       route(start, pos.lat() + ',' + pos.lng(), 'WALKING');
@@ -318,10 +320,14 @@ function initMap() {
         .then(showBikeMarkers)
         .catch(alert);
       // Fill current location in start box
-      $('#start').val(pos.lat.toFixed(5) + ',' + pos.lng.toFixed(5));
+      currentPosition = pos.lat + ',' + pos.lng;
+      $('#start').val('Your location');
     },
     () => alert('navigator.geolocation failed, may not be supported')
   );
   // Clear start input box if user places cursor into box
-  $('#start').click(() => $('#start').val(''));
+  $('#start').click(() => {
+    currentPosition = null;
+    $('#start').val('');
+  });
 }

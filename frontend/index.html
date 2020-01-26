@@ -43,77 +43,75 @@
         <div class="container w-container">
           <nav role="navigation" class="nav-menu w-nav-menu">
             <img
-              src="https://uploads-ssl.webflow.com/5e2d06eb86f417022f1da441/5e2d1aad12d935d467ec04cd_Asset%208.png"
+              src="img/velocity.png"
               width="343"
               alt=""
               class="image-2"
-              style="cursor: hand;"
             />
-            <form
-              id="layer-form"
-              class="form"
-            >
-              <label class="w-checkbox checkbox-field"
-                ><input
-                  type="checkbox"
-                  id="traffic-layer-checkbox"
-                  data-name="Traffic layer"
-                  class="w-checkbox-input checkbox"
-                /><span class="checkbox-label-2 w-form-label"
-                  >Traffic layer</span
-                ></label
-              ><label class="w-checkbox checkbox-field-2"
-                ><input
-                  type="checkbox"
-                  id="bike-path-checkbox"
-                  data-name="Bike path layer"
-                  class="w-checkbox-input checkbox-2"
-                /><span class="checkbox-label w-form-label"
-                  >Bike path layer</span
-                ></label
-              >
-            </form>
             <div>
+              <div class="w-form">
+                <div
+                  data-name="Bike Map Layers"
+                  class="form"
+                >
+                  <label class="w-checkbox checkbox-field"
+                    ><input
+                      type="checkbox"
+                      id="traffic-layer-checkbox"
+                      data-name="Traffic Layer Checkbox"
+                      class="w-checkbox-input checkbox"
+                    /><span class="checkbox-label-2 w-form-label"
+                      >Traffic layer</span
+                    ></label
+                  ><label class="w-checkbox checkbox-field-2"
+                    ><input
+                      type="checkbox"
+                      id="bike-path-checkbox"
+                      data-name="Bike Path Layer"
+                      class="w-checkbox-input checkbox-2"
+                    /><span class="checkbox-label w-form-label"
+                      >Bike path layer</span
+                    ></label
+                  >
+                </div>
+              </div>
+              <form class="search w-form">
                 <div class="container-2 w-container"></div>
                 <div>
                   <input
-                    type="text"
                     class="search-input w-input"
-                    maxlength="256"
-                    name="query"
                     placeholder="Choose starting point..."
                     id="start"
                     required=""
                   />
                 </div>
+              </form>
             </div>
             <div>
+              <form class="search w-form">
                 <div class="container-2 w-container"></div>
                 <div>
                   <input
-                    type="text"
                     class="search-input w-input"
-                    maxlength="256"
-                    name="query"
                     placeholder="Choose destination..."
                     id="end"
                     required=""
                   />
                 </div>
+              </form>
             </div>
-            <div style="padding-right: 10px;">
+            <div style="padding-right: 5px; padding-left: 5px;">
               <div id="bikeLayerInfo"></div>
               <div id="right-panel"></div>
             </div>
           </nav>
           <div class="menu-button w-nav-button">
-            <div class="w-icon-nav-menu"></div>
+            <div class="icon w-icon-nav-menu"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!--<div id="right-panel"></div>-->
     <div id="map"></div>
     <!--<p id="bikeLayerInfo"></p>-->
 

@@ -7,7 +7,7 @@
         /* Set the size of the div element that contains the map */
         
         #map {
-            height: 400px;
+            height: 600px;
             /* The height is 400 pixels */
             width: 100%;
             /* The width is the width of the web page */
@@ -17,9 +17,17 @@
 </head>
 
 <body>
-    <h3>My Google Maps Demo</h3>
+    <h3>Velocity</h3>
+
+    <div class="start">
+        <input type="text" id="startLocation" placeholder="Start" />
+    </div>
+    <div class="end">
+        <input type="text" id="endLocation" placeholder="End" />
+    </div>
+
     <button class="button" id="showTraffic">Show Traffic</button>
-    <button class="button" id="showBikeLayer">Show Bike Routes</button>
+    <button class="button" id="showBikeLayer">Show Bike</button>
     <br />
     <br />
     <!--The div element for the map -->
@@ -27,6 +35,51 @@
     <p id="bikeLayerInfo"></p>
     <script>
         // Initialize and add the map
+        var showTrafficLayer = false;
+        var showBikingLayer = false;
+
+        // The bikes, shown on the map
+        const url = "/bikes_near_zach.csv";
+        const showMarkers = data => {
+            const rows = data.split("\n");
+            const header = rows[0];
+            const markers = [];
+            for (var i = 1; i < rows.length; i++) {
+                const x = rows[i].split(",");
+                const lat = parseFloat(x[2]);
+                const lng = parseFloat(x[3]);
+
+                markers.push(
+                    new google.maps.Marker({
+                        position: {
+                            lat,
+                            lng
+                        },
+                        map: map,
+                        icon: bike
+                    })
+                );
+            }
+            var markerCluster = new MarkerClusterer(map, markers, {
+                imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
+            });
+        };
+        $.get(url, showMarkers);
+        // Show traffic
+        $("#showTraffic").click(() => {
+            var trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
+        });
+        // Show bike layer
+        $("#showBikeLayer").click(() => {
+            var bikeLayer = new google.maps.BicyclingLayer();
+            bikeLayer.setMap(map);
+            $("#bikeLayerInfo").text(
+                "Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage."
+            );
+        });
+        }
+
         function initMap() {
             const positions = [
                 [30.6229431, -96.3369853],
@@ -60,6 +113,7 @@
             ];
 
             var iconBase = "https://maps.google.com/mapfiles/kml/";
+
             var parking = {
                 url: iconBase + "paddle/P.png",
                 scaledSize: new google.maps.Size(30, 30),
@@ -75,7 +129,7 @@
             };
 
             var map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 13,
+                zoom: 18,
                 center: {
                     lat: positions[0][0],
                     lng: positions[0][1]
@@ -110,19 +164,21 @@
                 const markers = [];
                 for (var i = 1; i < rows.length; i++) {
                     const x = rows[i].split(",");
-                    const lat = parseFloat(x[2]);
-                    const lng = parseFloat(x[3]);
+                    const lock_open = parseInt(x[1]);
+                    if (lock_open) {
+                        const lat = parseFloat(x[2]);
+                        const lng = parseFloat(x[3]);
 
-                    markers.push(
-                        new google.maps.Marker({
-                            position: {
-                                lat,
-                                lng
-                            },
-                            map: map,
-                            icon: bike
-                        })
-                    );
+                        markers.push(
+                            new google.maps.Marker({
+                                position: {
+                                    lat,
+                                    lng
+                                },
+                                map: map
+                            })
+                        );
+                    }
                 }
                 var markerCluster = new MarkerClusterer(map, markers, {
                     imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m"
@@ -130,17 +186,40 @@
             };
             $.get(url, showMarkers);
             // Show traffic
+            var trafficLayer = new google.maps.TrafficLayer();
             $("#showTraffic").click(() => {
-                var trafficLayer = new google.maps.TrafficLayer();
-                trafficLayer.setMap(map);
+                showTrafficLayer = !showTrafficLayer;
+                trafficLayer.setMap(showTrafficLayer ? map : null);
             });
             // Show bike layer
+            var bikeLayer = new google.maps.BicyclingLayer();
             $("#showBikeLayer").click(() => {
-                var bikeLayer = new google.maps.BicyclingLayer();
-                bikeLayer.setMap(map);
-                $("#bikeLayerInfo").text(
-                    "Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated “bike lanes.” Dashed routes indicate streets or paths otherwise recommended for bicycle usage."
-                );
+                showBikingLayer = !showBikingLayer;
+                if (showBikingLayer) {
+                    $("#bikeLayerInfo").text(
+                        'Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated "bike lanes." Dashed routes indicate streets or paths otherwise recommended for bicycle usage.'
+                    );
+                    bikeLayer.setMap(map);
+                } else {
+                    bikeLayer.setMap(null);
+                }
+            });
+        }
+        //plots route
+        function calcRoute() {
+            var start = document.getElementById("start").value;
+            var end = document.getElementById("end").value;
+            var stops = document.getElementById("stops").value;
+            var request = {
+                origin: start,
+                destination: end,
+                waypoints: stops,
+                travelMode: "DRIVING"
+            };
+            directionsService.route(request, function(result, status) {
+                if (status == "OK") {
+                    directionsRenderer.setDirections(result);
+                }
             });
         }
     </script>

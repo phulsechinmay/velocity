@@ -318,9 +318,11 @@ function initMap() {
     $('#bike-better-popup').show();
   }
 
-  function updateCurrent() {
+  function updateCurrent(isBikeRoute = false) {
     var curTime = currentRoute.routes[0].legs[0].duration;
-    $('#current-route-info').text('Current route: ' + curTime['text']);
+    let totalCost = 0.5 * Math.ceil(curTime['value'] / 60 / 30);
+    let textToShow = (isBikeRoute) ? `Current route: ${curTime['text']} | Cost: $${totalCost}` : `Current route: ${curTime['text']}`;
+    $('#current-route-info').text(textToShow);
   }
 
   function route(origin, destination, travelMode) {
@@ -389,7 +391,7 @@ function initMap() {
                           walkLeg.routes[0].warnings.pop();
                           directionsRenderer.setDirections(walkLeg);
                           currentRoute = walkLeg;
-                          updateCurrent();
+                          updateCurrent(true);
                         }
                         else{
                           window.alert('Directions request failed due to ' + status);
@@ -507,7 +509,7 @@ function initMap() {
   $('#showBikeRoute').click(() => {
     directionsRenderer.setDirections(bikeRoute);
     currentRoute = bikeRoute;
-    updateCurrent();
+    updateCurrent(true);
     $('#bike-better-popup').hide();
   });
 

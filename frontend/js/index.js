@@ -123,6 +123,43 @@ function initMap() {
     }
   }
 
+  function walkToBike(origin,bike,destination){
+    var walkLeg;
+    var bikeLeg;
+    directionsService.route(
+      {
+        origin: origin,
+        destination: bike,
+        travelMode: "WALKING"
+      },
+      function(response, status) {
+        if (status === "OK") {
+          walkLeg = response;
+          //directionsRenderer.setDirections(response);
+        } else {
+          window.alert("Directions request failed due to " + status);
+        }
+      }
+    );
+    directionsService.route(
+      {
+        origin: bike,
+        destination: destination,
+        travelMode: "BICYCLING"
+      },
+      function(response, status) {
+        if (status === "OK") {
+          bikeLeg = response;
+          //directionsRenderer.setDirections(response);
+        } else {
+          window.alert("Directions request failed due to " + status);
+        }
+      }
+    );
+    walkLeg.route[0].legs.push(bikeLeg.route[0].legs[0]);
+    directionsRenderer.setDirections(walkLeg);
+  }
+
   var parking = {
     url: iconBase + "parking_lot_maps.png",
     scaledSize: new google.maps.Size(30, 30),

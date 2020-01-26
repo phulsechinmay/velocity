@@ -158,6 +158,7 @@ function initMap() {
           bikeLeg = response
           //directionsRenderer.setDirections(response);
           walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0])
+          walkLeg.routes[0].warnings.pop();
           directionsRenderer.setDirections(walkLeg)
         } else {
           window.alert('Directions request failed due to ' + status)

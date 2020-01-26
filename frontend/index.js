@@ -50,9 +50,6 @@ function initMap() {
     }
   });
   directionsRenderer.setMap(map);
-  if(showDirectionPanel){
-    directionsRenderer.setPanel(document.getElementById("right-panel"));
-  }
 
   var control = document.getElementById("floating-panel");
   control.style.display = "block";
@@ -200,6 +197,7 @@ function initMap() {
   });
   $('#showDirections').click(()=>{
     showDirectionPanel = !showDirectionPanel;
+    directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
   });
   $.get(url, showMarkers);
   // Show traffic

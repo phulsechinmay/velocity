@@ -2,7 +2,7 @@
 var showTrafficLayer = false;
 var showBikingLayer = false;
 var showDirectionPanel = true;
-var closestStation = false
+var closestStation = false;
 var displayRoute;
 var bikeRoute;
 var carRoute;
@@ -318,7 +318,7 @@ function initMap() {
     $('#bike-better-popup').show();
   }
 
-  function updateCurrent(){
+  function updateCurrent() {
     var curTime = currentRoute.routes[0].legs[0].duration;
     $('#current-route-info').text('Current route: ' + curTime['text']);
   }
@@ -356,9 +356,9 @@ function initMap() {
       function(response, status) {
         if (status === 'OK') {
           walkLeg = response;
-          if(closestStation){
-            query = getNearbyStations(origin)
-            var station = query[0]
+          if (closestStation) {
+            query = getNearbyStations(origin);
+            var station = query[0];
             directionsService.route(
               {
                 origin: bike,
@@ -373,19 +373,20 @@ function initMap() {
                     {
                       origin: station,
                       destination: destination,
-                      travelMode: 'WALKING'
+                      travelMode: 'WALKING',
                     },
-                    function(response, status){
-                      if(status === 'OK'){
-                        bikeLeg = response
+                    function(response, status) {
+                      if (status === 'OK') {
+                        bikeLeg = response;
                         walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
                         walkLeg.routes[0].warnings.pop();
                         directionsRenderer.setDirections(walkLeg);
                         currentRoute = walkLeg;
                         updateCurrent();
-                      }
-                      else{
-                        window.alert('Directions request failed due to ' + status);
+                      } else {
+                        window.alert(
+                          'Directions request failed due to ' + status
+                        );
                       }
                     }
                   );
@@ -394,26 +395,27 @@ function initMap() {
                 }
               }
             );
-          }
-          else{directionsService.route(
-            {
-              origin: bike,
-              destination: destination,
-              travelMode: 'BICYCLING',
-            },
-            function(response, status) {
-              if (status === 'OK') {
-                bikeLeg = response;
-                walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
-                walkLeg.routes[0].warnings.pop();
-                directionsRenderer.setDirections(walkLeg);
-                currentRoute = walkLeg;
-                updateCurrent();
-              } else {
-                window.alert('Directions request failed due to ' + status);
+          } else {
+            directionsService.route(
+              {
+                origin: bike,
+                destination: destination,
+                travelMode: 'BICYCLING',
+              },
+              function(response, status) {
+                if (status === 'OK') {
+                  bikeLeg = response;
+                  walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
+                  walkLeg.routes[0].warnings.pop();
+                  directionsRenderer.setDirections(walkLeg);
+                  currentRoute = walkLeg;
+                  updateCurrent();
+                } else {
+                  window.alert('Directions request failed due to ' + status);
+                }
               }
-            }
-          );}
+            );
+          }
         } else {
           window.alert('Directions request failed due to ' + status);
         }
@@ -511,10 +513,10 @@ function initMap() {
   });
   directionsRenderer.setPanel(
     showDirectionPanel ? document.getElementById('right-panel') : null
-  )
-  $('#closest-checkbox').click(()=>{
-    closestStation = !closestStation
-  })
+  );
+  $('#closest-checkbox').click(() => {
+    closestStation = !closestStation;
+  });
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();
   $('#traffic-layer-checkbox').click(() => {

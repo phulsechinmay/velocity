@@ -140,6 +140,7 @@ function initMap() {
       function(response, status) {
         if (status === 'OK') {
           currentRoute = response;
+          currentRoute.routes[0].warnings.pop();
           directionsRenderer.setDirections(currentRoute);
         } else {
           window.alert('Directions request failed due to ' + status);

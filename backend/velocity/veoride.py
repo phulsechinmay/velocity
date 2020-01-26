@@ -45,12 +45,11 @@ destinations: list of tuples of (lat, lng)
 """
 def get_walking_travel_info(origin, destinations):
   encoded_destinations = "|".join([f"{lat},{lng}" for lat, lng in destinations])
-  encoded_origin = f"{origin[0]},{origin[1]}"
 
   params = {
     "units": "imperial",
     "mode": "walking",
-    "origins": encoded_origin,
+    "origins": origin,
     "destinations": encoded_destinations,
     "key": constants.GOOGLE_API_KEY
   }
@@ -76,6 +75,7 @@ def process_and_filter_bike_data(bike_data, user_loc):
 
   bike_locations = [(bike['location']['lat'], bike['location']['lng']) for bike in bike_data]
 
+  encoded_user_loc = f"{user_loc[0]},{user_loc[1]}"
   walking_travel_info = get_walking_travel_info(user_loc, bike_locations)
 
   if walking_travel_info == None: return None
@@ -121,10 +121,9 @@ def veoride_get_nearby_bikes():
 """
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/get_nearby_stations")
 def veoride_get_nearby_stations():
-  user_lat = request.args.get('lat')
-  user_lng = request.args.get('lng')
+  origin = request.args.get('origin')
 
-  walking_travel_info = get_walking_travel_info((user_lat, user_lng), constants.BIKE_STATION_LOCATIONS)
+  walking_travel_info = get_walking_travel_info(origin, constants.BIKE_STATION_LOCATIONS)
 
   if walking_travel_info == None:
     return jsonify({"error": "Error in getting station data"}), 500

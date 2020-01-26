@@ -15,12 +15,20 @@
     <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
 
-  <body>
-    <h3>My Google Maps Demo</h3>
-    <button class="button" id="showTraffic">Traffic Layer</button>
-    <button class="button" id="showBikeLayer">Bike Layer</button>
-    <br />
-    <br />
+<body>
+    <h3>Velocity</h3>
+
+    <div class="start">
+      <input type="text" id="startLocation" placeholder="Start">
+    </div>
+    <div class="end">
+      <input type="text" id="endLocation" placeholder="End">
+    </div>
+
+    <button class='button' id="showTraffic">Show Traffic</button>
+    <button class='button' id="showBikeLayer">Show Bike</button>
+    <br/>
+    <br/>
     <!--The div element for the map -->
     <div id="map"></div>
     <p id="bikeLayerInfo"></p>

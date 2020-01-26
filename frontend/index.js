@@ -207,4 +207,6 @@ function initMap() {
     },
     () => alert("navigator.geolocation failed, may not be supported")
   );
+  // Clear start input box if user places cursor into box
+  $("#start").click(() => $("#start").val(""));
 }

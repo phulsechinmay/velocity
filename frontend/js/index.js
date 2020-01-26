@@ -169,43 +169,51 @@ function initMap() {
         if (status === 'OK') {
           walkLeg = response;
           if(closestStation){
-            query = getNearbyStations(origin)
-            var station = query[0]
-            directionsService.route(
-              {
-                origin: bike,
-                destination: station,
-                travelMode: 'BICYCLING',
-              },
-              function(response, status) {
-                if (status === 'OK') {
-                  bikeLeg = response;
-                  walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
-                  directionsService.route(
-                    {
-                      origin: station,
-                      destination: destination,
-                      travelMode: 'WALKING'
-                    },
-                    function(response, status){
-                      if(status === 'OK'){
-                        bikeLeg = response
-                        walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
-                        walkLeg.routes[0].warnings.pop();
-                        directionsRenderer.setDirections(walkLeg);
-                        currentRoute = walkLeg;
-                        updateCurrent();
+            getNearbyStations(destination)
+            .then(function(data){
+              
+              query = data
+              var lat = query[0].lat
+              var lng = query[0].lng
+              console.log(lat+","+lng)
+              var station = lat+","+lng
+            
+              directionsService.route(
+                {
+                  origin: bike,
+                  destination: station,
+                  travelMode: 'BICYCLING',
+                },
+                function(response, status) {
+                  if (status === 'OK') {
+                    bikeLeg = response;
+                    walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
+                    directionsService.route(
+                      {
+                        origin: station,
+                        destination: destination,
+                        travelMode: 'WALKING'
+                      },
+                      function(response, status){
+                        if(status === 'OK'){
+                          bikeLeg = response
+                          walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
+                          walkLeg.routes[0].warnings.pop();
+                          directionsRenderer.setDirections(walkLeg);
+                          currentRoute = walkLeg;
+                          updateCurrent();
+                        }
+                        else{
+                          window.alert('Directions request failed due to ' + status);
+                        }
                       }
-                      else{
-                        window.alert('Directions request failed due to ' + status);
-                      }
-                    }
-                  );
-                } else {
-                  window.alert('Directions request failed due to ' + status);
+                    );
+                  } else {
+                    window.alert('Directions request failed due to ' + status);
+                  }
                 }
-              }
-            );
+              );
+            })            
           }
           else{directionsService.route(
             {

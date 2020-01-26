@@ -22,12 +22,13 @@ function getNearbyBikes(lat, lng, userToken = VEORIDE_TOKEN) {
 }
 
 function getNearbyStations(origin){
+  console.log(origin)
   return new Promise(function(resolve, reject){
     params = {
       origin
     }
     axios
-      .get(`${config.SERVER_URL}/api/veorider/get_nearby_stations`, {params})
+      .get(`${config.SERVER_URL}/api/veoride/get_nearby_stations`, {params})
       .then(function(resp){
         if(resp.status != 200){
           reject(resp.data.error)

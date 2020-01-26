@@ -1,11 +1,11 @@
 // Initialize and add the map
-var showTrafficLayer = false;
-var showBikingLayer = false;
-var showDirectionPanel = true;
-var showBikeRoute = false;
-var displayRoute;
-var bikeRoute;
-var carRoute;
+var showTrafficLayer = false
+var showBikingLayer = false
+var showDirectionPanel = true
+var showBikeRoute = false
+var displayRoute
+var bikeRoute
+var carRoute
 
 function initMap() {
   const positions = [
@@ -36,90 +36,96 @@ function initMap() {
     [30.6054296, -96.3472921],
     [30.6051064, -96.346981],
     [30.6050603, -96.3491375],
-    [30.6013654, -96.3543799]
-  ];
+    [30.6013654, -96.3543799],
+  ]
 
-  var iconBase = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
-  var directionsService = new google.maps.DirectionsService();
-  var directionsRenderer = new google.maps.DirectionsRenderer();
-  var map = new google.maps.Map(document.getElementById("map"), {
+  var iconBase =
+    'https://developers.google.com/maps/documentation/javascript/examples/full/images/'
+  var directionsService = new google.maps.DirectionsService()
+  var directionsRenderer = new google.maps.DirectionsRenderer()
+  var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 15,
     center: {
       lat: positions[13][0],
-      lng: positions[13][1]
-    }
-  });
-  directionsRenderer.setMap(map);
+      lng: positions[13][1],
+    },
+  })
+  directionsRenderer.setMap(map)
 
   var defaultBounds = new google.maps.LatLngBounds(
     new google.maps.LatLng(30.5159362, -96.5171539),
     new google.maps.LatLng(30.7215865, -96.2252309)
-  );
+  )
   var onChangeHandler = function() {
-    if ($("#start").val() !== "" & $("#end").val() !== "") {
-      calculateAndDisplayRoute(directionsService, directionsRenderer);
+    if (($('#start').val() !== '') & ($('#end').val() !== '')) {
+      calculateAndDisplayRoute(directionsService, directionsRenderer)
     }
-  };
-
-  const startAutocomplete = new google.maps.places.Autocomplete(
-    document.getElementById("start"),
-    {
-      bounds: defaultBounds,
-      strictBounds: true
-    }
-  );
-  startAutocomplete.addListener("place_changed", onChangeHandler);
-
-  const endAutocomplete = new google.maps.places.Autocomplete(
-    document.getElementById("end"),
-    {
-      bounds: defaultBounds,
-      strictBounds: true
-    }
-  );
-  endAutocomplete.addListener("place_changed", onChangeHandler);
-
-  function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-    var start = document.getElementById("start").value;
-    var end = document.getElementById("end").value;
-    directionsService.route(
-      {
-        origin: start,
-        destination: end,
-        travelMode: "BICYCLING"
-      },
-      function(response, status) {
-        if (status === "OK") {
-          bikeRoute = response;
-          //directionsRenderer.setDirections(response);
-        } else {
-          window.alert("Directions request failed due to " + status);
-        }
-      }
-    );
-    directionsService.route(
-      {
-        origin: start,
-        destination: end,
-        travelMode: "DRIVING"
-      },
-      function(response, status) {
-        if (status === "OK") {
-          carRoute = response;
-          directionsRenderer.setDirections(response);
-          displayBikeSuggestion();
-        } else {
-          window.alert("Directions request failed due to " + status);
-        }
-      }
-    );
   }
 
-  function displayBikeSuggestion(){
-    var bikeTime = bikeRoute.routes[0].legs[0].duration;
-    var carTime = carRoute.routes[0].legs[0].duration;
-    if(carTime["value"] > bikeTime["value"]){
-      $('#bikeMsg').text("Bike Route is: "+bikeTime["text"]+"Current route is: "+carTime["text"]);
+  const startAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('start'),
+    {
+      bounds: defaultBounds,
+      strictBounds: true,
+    }
+  )
+  startAutocomplete.addListener('place_changed', onChangeHandler)
+
+  const endAutocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('end'),
+    {
+      bounds: defaultBounds,
+      strictBounds: true,
+    }
+  )
+  endAutocomplete.addListener('place_changed', onChangeHandler)
+
+  function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+    var start = document.getElementById('start').value
+    var end = document.getElementById('end').value
+    directionsService.route(
+      {
+        origin: start,
+        destination: end,
+        travelMode: 'BICYCLING',
+      },
+      function(response, status) {
+        if (status === 'OK') {
+          bikeRoute = response
+          //directionsRenderer.setDirections(response);
+        } else {
+          window.alert('Directions request failed due to ' + status)
+        }
+      }
+    )
+    directionsService.route(
+      {
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING',
+      },
+      function(response, status) {
+        if (status === 'OK') {
+          carRoute = response
+          directionsRenderer.setDirections(response)
+          displayBikeSuggestion()
+        } else {
+          window.alert('Directions request failed due to ' + status)
+        }
+      }
+    )
+  }
+
+  function displayBikeSuggestion() {
+    var bikeTime = bikeRoute.routes[0].legs[0].duration
+    var carTime = carRoute.routes[0].legs[0].duration
+    if (carTime['value'] > bikeTime['value']) {
+      $('#bikeMsg').text(
+        'Bike Route is: ' +
+          bikeTime['text'] +
+          'Current route is: ' +
+          carTime['text']
+      )
     }
   }
 
@@ -161,20 +167,20 @@ function initMap() {
   }
 
   var parking = {
-    url: iconBase + "parking_lot_maps.png",
+    url: iconBase + 'parking_lot_maps.png',
     scaledSize: new google.maps.Size(30, 30),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(0, 0)
-  };
+    anchor: new google.maps.Point(0, 0),
+  }
 
   var bike = {
-    url: "cycling.png",
+    url: 'cycling.png',
     scaledSize: new google.maps.Size(30, 30),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(0, 0)
-  };
+    anchor: new google.maps.Point(0, 0),
+  }
 
-  var stationMarkers = [];
+  var stationMarkers = []
 
   positions.forEach(function(position) {
     stationMarkers.push(
@@ -183,99 +189,113 @@ function initMap() {
         icon: parking,
         map: map,
         zindex: 10,
-        visible: false
+        visible: false,
       })
-    );
-  });
+    )
+  })
 
-  google.maps.event.addListener(map, "zoom_changed", function() {
-    var zoom = map.getZoom();
+  google.maps.event.addListener(map, 'zoom_changed', function() {
+    var zoom = map.getZoom()
     for (i = 0; i < stationMarkers.length; i++) {
-      stationMarkers[i].setVisible(zoom >= 15);
+      stationMarkers[i].setVisible(zoom >= 15)
     }
-  });
-
-  // The bikes, shown on the map
+  })
+  // Function that gets called if you click bike marker
+  const chooseBike = bikeMarker => {
+    const pos = bikeMarker.getPosition()
+    console.log(pos)
+  }
+  // Show bikes on map
   const showBikeMarkers = data => {
-    const bikeMarkers = [];
+    const bikeMarkers = []
     for (var i = 1; i < data.length; i++) {
-      const bike_data = data[i];
-      const lock_open = bike_data.lockStatus;
+      const bike_data = data[i]
+      const lock_open = bike_data.lockStatus
       if (lock_open) {
-        const lat = bike_data.location.lat;
-        const lng = bike_data.location.lng;
+        const lat = bike_data.location.lat
+        const lng = bike_data.location.lng
         const bikeMarker = new google.maps.Marker({
           position: {
             lat,
-            lng
+            lng,
           },
           map: map,
-          icon: bike
-        });
-        bikeMarkers.push(bikeMarker);
+          icon: bike,
+        })
+        bikeMarker.addListener('click', () => chooseBike(bikeMarker))
+        bikeMarkers.push(bikeMarker)
       }
     }
     new MarkerClusterer(map, bikeMarkers, {
       imagePath:
-        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+        'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
       gridSize: 30,
-      minimumClusterSize: 10,  
-    });
-  };
-  $('#showBikeRoute').click(()=>{
-    showBikeRoute = !showBikeRoute;
-    directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute);
-  });
+      minimumClusterSize: 10,
+    })
+  }
+  $('#showBikeRoute').click(() => {
+    showBikeRoute = !showBikeRoute
+    directionsRenderer.setDirections(showBikeRoute ? bikeRoute : carRoute)
+  })
 
-  $('#showDirections').click(()=>{
-    showDirectionPanel = !showDirectionPanel;
-    directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
-  });
-  directionsRenderer.setPanel(showDirectionPanel ? document.getElementById("right-panel") : null);
+  $('#showDirections').click(() => {
+    showDirectionPanel = !showDirectionPanel
+    directionsRenderer.setPanel(
+      showDirectionPanel ? document.getElementById('right-panel') : null
+    )
+  })
+  directionsRenderer.setPanel(
+    showDirectionPanel ? document.getElementById('right-panel') : null
+  )
   // Show traffic
-  var trafficLayer = new google.maps.TrafficLayer();
-  $("#showTraffic").click(() => {
-    showTrafficLayer = !showTrafficLayer;
-    trafficLayer.setMap(showTrafficLayer ? map : null);
-  });
+  var trafficLayer = new google.maps.TrafficLayer()
+  $('#showTraffic').click(() => {
+    showTrafficLayer = !showTrafficLayer
+    trafficLayer.setMap(showTrafficLayer ? map : null)
+  })
   // Show bike layer
-  var bikeLayer = new google.maps.BicyclingLayer();
-  $("#showBikeLayer").click(() => {
-    showBikingLayer = !showBikingLayer;
+  var bikeLayer = new google.maps.BicyclingLayer()
+  $('#showBikeLayer').click(() => {
+    showBikingLayer = !showBikingLayer
     if (showBikingLayer) {
-      $("#bikeLayerInfo").text(
+      $('#bikeLayerInfo').text(
         'Dark green routes indicated dedicated bicycle routes. Light green routes indicate streets with dedicated "bike lanes." Dashed routes indicate streets or paths otherwise recommended for bicycle usage.'
-      );
-      bikeLayer.setMap(map);
+      )
+      bikeLayer.setMap(map)
     } else {
-      $("#bikeLayerInfo").text(" ");
-      bikeLayer.setMap(null);
+      $('#bikeLayerInfo').text(' ')
+      bikeLayer.setMap(null)
     }
-  });
+  })
   // Show current location
-  var im = "http://www.robotwoods.com/dev/misc/bluecircle.png";
+  var im = 'http://www.robotwoods.com/dev/misc/bluecircle.png'
   navigator.geolocation.getCurrentPosition(
     position => {
       var pos = {
         lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var myLatLng = new google.maps.LatLng(pos.lat, pos.lng);
+        lng: position.coords.longitude,
+      }
+      var myLatLng = new google.maps.LatLng(pos.lat, pos.lng)
       new google.maps.Marker({
         position: myLatLng,
         map: map,
-        icon: im
-      });
-      map.setCenter(pos);
+        icon: im,
+      })
+      map.setCenter(pos)
       // Get nearby bikes
       getNearbyBikes(pos.lat, pos.lng)
         .then(showBikeMarkers)
-        .catch(alert);
+        .catch(alert)
       // Fill current location in start box
-      $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5));
+      $('#start').val(pos.lat.toFixed(5) + ',' + pos.lng.toFixed(5))
     },
-    () => alert("navigator.geolocation failed, may not be supported")
-  );
+    () => alert('navigator.geolocation failed, may not be supported')
+  )
   // Clear start input box if user places cursor into box
+<<<<<<< HEAD
   $("#start").click(() => $("#start").val(""));
 }
+=======
+  $('#start').click(() => $('#start').val(''))
+}
+>>>>>>> 332976978419d2509c4f2c8fa0005c442b079ab9

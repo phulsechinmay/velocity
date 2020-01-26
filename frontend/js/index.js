@@ -137,48 +137,48 @@ function initMap() {
     anchor: new google.maps.Point(0, 0)
   };
 
-  var markers = [];
+  var stationMarkers = [];
 
   positions.forEach(function(position) {
-    var marker = new google.maps.Marker({
-      position: new google.maps.LatLng(position[0], position[1]),
-      icon: parking,
-      map: map,
-      zindex: 10,
-      visible: false
-    });
-    markers.push(marker);
+    stationMarkers.push(
+      new google.maps.Marker({
+        position: new google.maps.LatLng(position[0], position[1]),
+        icon: parking,
+        map: map,
+        zindex: 10,
+        visible: false
+      })
+    );
   });
 
   google.maps.event.addListener(map, "zoom_changed", function() {
     var zoom = map.getZoom();
-    for (i = 0; i < markers.length; i++) {
-      markers[i].setVisible(zoom >= 15);
+    for (i = 0; i < stationMarkers.length; i++) {
+      stationMarkers[i].setVisible(zoom >= 15);
     }
   });
 
   // The bikes, shown on the map
-  const showMarkers = data => {
-    const markers = [];
+  const showBikeMarkers = data => {
+    const bikeMarkers = [];
     for (var i = 1; i < data.length; i++) {
       const bike_data = data[i];
       const lock_open = bike_data.lockStatus;
       if (lock_open) {
         const lat = bike_data.location.lat;
         const lng = bike_data.location.lng;
-        markers.push(
-          new google.maps.Marker({
-            position: {
-              lat,
-              lng
-            },
-            map: map,
-            icon: bike
-          })
-        );
+        const bikeMarker = new google.maps.Marker({
+          position: {
+            lat,
+            lng
+          },
+          map: map,
+          icon: bike
+        });
+        bikeMarkers.push(bikeMarker);
       }
     }
-    var markerCluster = new MarkerClusterer(map, markers, {
+    new MarkerClusterer(map, bikeMarkers, {
       imagePath:
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       gridSize: 30,
@@ -222,7 +222,7 @@ function initMap() {
         lng: position.coords.longitude
       };
       var myLatLng = new google.maps.LatLng(pos.lat, pos.lng);
-      var userMarker = new google.maps.Marker({
+      new google.maps.Marker({
         position: myLatLng,
         map: map,
         icon: im
@@ -230,7 +230,7 @@ function initMap() {
       map.setCenter(pos);
       // Get nearby bikes
       getNearbyBikes(pos.lat, pos.lng)
-        .then(showMarkers)
+        .then(showBikeMarkers)
         .catch(alert);
       // Fill current location in start box
       $("#start").val(pos.lat.toFixed(5) + "," + pos.lng.toFixed(5));

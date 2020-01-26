@@ -2,6 +2,7 @@
 var showTrafficLayer = false;
 var showBikingLayer = false;
 var showDirectionPanel = true;
+var closestStation = false
 var displayRoute;
 var bikeRoute;
 var carRoute;
@@ -275,7 +276,10 @@ function initMap() {
   });
   directionsRenderer.setPanel(
     showDirectionPanel ? document.getElementById('right-panel') : null
-  );
+  )
+  $('#closest-checkbox').click(()=>{
+    closestStation = !closestStation
+  })
   // Show traffic
   var trafficLayer = new google.maps.TrafficLayer();
   $('#traffic-layer-checkbox').click(() => {

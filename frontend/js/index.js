@@ -109,6 +109,7 @@ function initMap() {
               if (status === 'OK') {
                 carRoute = response;
                 directionsRenderer.setDirections(response);
+                currentRoute = response;
                 displayBikeSuggestion();
               } else {
                 window.alert('Directions request failed due to ' + status);
@@ -124,10 +125,14 @@ function initMap() {
 
   function displayBikeSuggestion() {
     var bikeTime = bikeRoute.routes[0].legs[0].duration;
-    var carTime = carRoute.routes[0].legs[0].duration;
     $('#bikeMsg').text('Bike route is: ' + bikeTime['text']);
-    $('#currentMsg').text('Current route is: ' + carTime['text']);
+    updateCurrent();
     $('#bike-better-popup').show();
+  }
+
+  function updateCurrent(){
+    var curTime = currentRoute.routes[0].legs[0].duration;
+    $('#current-route-info').text('Current route: ' + curTime['text']);
   }
 
   function route(origin, destination, travelMode) {
@@ -145,6 +150,7 @@ function initMap() {
           currentRoute = response;
           currentRoute.routes[0].warnings.pop();
           directionsRenderer.setDirections(currentRoute);
+          updateCurrent();
         } else {
           window.alert('Directions request failed due to ' + status);
         }
@@ -162,8 +168,46 @@ function initMap() {
       function(response, status) {
         if (status === 'OK') {
           walkLeg = response;
-          //directionsRenderer.setDirections(response);
-          directionsService.route(
+          if(closestStation){
+            query = getNearbyStations(origin)
+            var station = query[0]
+            directionsService.route(
+              {
+                origin: bike,
+                destination: station,
+                travelMode: 'BICYCLING',
+              },
+              function(response, status) {
+                if (status === 'OK') {
+                  bikeLeg = response;
+                  walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
+                  directionsService.route(
+                    {
+                      origin: station,
+                      destination: destination,
+                      travelMode: 'WALKING'
+                    },
+                    function(response, status){
+                      if(status === 'OK'){
+                        bikeLeg = response
+                        walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
+                        walkLeg.routes[0].warnings.pop();
+                        directionsRenderer.setDirections(walkLeg);
+                        currentRoute = walkLeg;
+                        updateCurrent();
+                      }
+                      else{
+                        window.alert('Directions request failed due to ' + status);
+                      }
+                    }
+                  );
+                } else {
+                  window.alert('Directions request failed due to ' + status);
+                }
+              }
+            );
+          }
+          else{directionsService.route(
             {
               origin: bike,
               destination: destination,
@@ -172,15 +216,16 @@ function initMap() {
             function(response, status) {
               if (status === 'OK') {
                 bikeLeg = response;
-                //directionsRenderer.setDirections(response);
                 walkLeg.routes[0].legs.push(bikeLeg.routes[0].legs[0]);
                 walkLeg.routes[0].warnings.pop();
                 directionsRenderer.setDirections(walkLeg);
+                currentRoute = walkLeg;
+                updateCurrent();
               } else {
                 window.alert('Directions request failed due to ' + status);
               }
             }
-          );
+          );}
         } else {
           window.alert('Directions request failed due to ' + status);
         }
@@ -265,6 +310,8 @@ function initMap() {
   };
   $('#showBikeRoute').click(() => {
     directionsRenderer.setDirections(bikeRoute);
+    currentRoute = bikeRoute;
+    updateCurrent();
     $('#bike-better-popup').hide();
   });
 
@@ -330,4 +377,4 @@ function initMap() {
     currentPosition = null;
     $('#start').val('');
   });
-}
+  }

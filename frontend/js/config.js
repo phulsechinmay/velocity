@@ -1,5 +1,0 @@
-config = {
-  SERVER_URL: 'http://localhost:5000',
-  VEORIDE_PHONE_NUMBER: '9799858688',
-  VEORIDE_TOKEN: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxOjU1MzQiLCJpYXQiOjE1Nzk5OTUzMTgsImV4cCI6MTU4Nzc3MTMxOH0.NNuurt6awK2ub3Athx0AqlIVNzTiWhZo_Xdi6zlrGXqDSJ17H2UIHpR8jtCiWC_XXgkQSWvpEsqgcesaSVlSnQ',
-}

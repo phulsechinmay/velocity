@@ -136,3 +136,4 @@ dmypy.json
 *.crt
 
 config.py
+config.js

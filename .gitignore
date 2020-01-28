@@ -134,3 +134,5 @@ dmypy.json
 *.csr
 *.pem
 *.crt
+
+config.py

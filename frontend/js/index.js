@@ -11,7 +11,7 @@ var bikeLeg;
 var currentRoute;
 var currentPosition;
 
-const getStartLocation = () => currentPosition || $('#start').val();
+const getStartLocation = () => $('#start').val() || currentPosition;
 
 function initMap() {
   const positions = [
@@ -259,7 +259,7 @@ function initMap() {
   };
 
   const startAutocomplete = new google.maps.places.Autocomplete(
-    getStartLocation(),
+    document.getElementById('start'),
     {
       bounds: defaultBounds,
       strictBounds: true,

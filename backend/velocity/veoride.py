@@ -3,6 +3,8 @@ from flask import request, jsonify
 from geopy.distance import geodesic
 import requests
 
+print(app.config["GOOGLE_API_KEY"])
+
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/request_verification_code")
 def veoride_request_verification_code():
   phone_number = request.args.get('phone_number')
@@ -51,7 +53,7 @@ def get_walking_travel_info(origin, destinations):
     "mode": "walking",
     "origins": origin,
     "destinations": encoded_destinations,
-    "key": constants.GOOGLE_API_KEY
+    "key": app.config["GOOGLE_API_KEY"]
   }
   walking_info_resp = requests.get("https://maps.googleapis.com/maps/api/distancematrix/json?" ,params=params)
   

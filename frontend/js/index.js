@@ -11,7 +11,7 @@ var bikeLeg;
 var currentRoute;
 var currentPosition;
 
-const getStartLocation = () => $('#start').val() || currentPosition;
+const getStartLocation = () => currentPosition || $('#start').val();
 
 function initMap() {
   const positions = [

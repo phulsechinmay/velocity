@@ -3,8 +3,6 @@ from flask import request, jsonify
 from geopy.distance import geodesic
 import requests
 
-print(app.config["GOOGLE_API_KEY"])
-
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/request_verification_code")
 def veoride_request_verification_code():
   phone_number = request.args.get('phone_number')
@@ -72,8 +70,8 @@ def process_and_filter_bike_data(bike_data, user_loc):
   bike_data.sort(key=lambda bike: geodesic((bike['location']['lat'], bike['location']['lng']), user_loc))
 
   # Trim down to MAX_NUM_BIKES before getting walking info from Google Maps
-  if len(bike_data) > constants.MAX_NUM_BIKES:
-    bike_data = bike_data[:constants.MAX_NUM_BIKES]
+  if len(bike_data) > constants.DISTANCE_MATRIX_MAX_DESTINATIONS:
+    bike_data = bike_data[:constants.DISTANCE_MATRIX_MAX_DESTINATIONS]
 
   bike_locations = [(bike['location']['lat'], bike['location']['lng']) for bike in bike_data]
 
@@ -96,7 +94,7 @@ def process_and_filter_bike_data(bike_data, user_loc):
 def veoride_get_nearby_bikes():
   num_bikes = int(request.args.get('num_bikes'))
   if not num_bikes:
-    num_bikes = constants.MAX_NUM_BIKES
+    num_bikes = constants.DISTANCE_MATRIX_MAX_DESTINATIONS
 
   user_token = request.args.get('user_token')
   user_lat = request.args.get('lat')
@@ -124,6 +122,8 @@ def veoride_get_nearby_bikes():
 @app.route(f"{constants.VEORIDE_ENDPOINT_PREFIX}/get_nearby_stations")
 def veoride_get_nearby_stations():
   origin = request.args.get('origin')
+
+  bike_station_locations
 
   walking_travel_info = get_walking_travel_info(origin, constants.BIKE_STATION_LOCATIONS)
 

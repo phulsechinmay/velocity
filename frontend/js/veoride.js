@@ -1,8 +1,4 @@
-const VEORIDE_PHONE_NUMBER = 9799858688
-const VEORIDE_TOKEN =
-  'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxOjU1MzQiLCJpYXQiOjE1Nzk5OTUzMTgsImV4cCI6MTU4Nzc3MTMxOH0.NNuurt6awK2ub3Athx0AqlIVNzTiWhZo_Xdi6zlrGXqDSJ17H2UIHpR8jtCiWC_XXgkQSWvpEsqgcesaSVlSnQ'
-
-function getNearbyBikes(lat, lng, userToken = VEORIDE_TOKEN) {
+function getNearbyBikes(lat, lng, userToken = config.VEORIDE_TOKEN) {
   return new Promise(function(resolve, reject) {
     params = {
       lat,
